@@ -5,7 +5,7 @@ const FooterManage = () => {
       padding: "10px 0"
     }}>
       <div>Hala Madrid</div>
-      <div>@2025 - Minh chim</div>
+      <div>@2025 - Minh chim uncut</div>
     </div>
   )
 }
