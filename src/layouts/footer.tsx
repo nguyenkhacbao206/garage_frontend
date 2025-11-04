@@ -4,8 +4,8 @@ const FooterManage = () => {
       textAlign: "center",
       padding: "10px 0"
     }}>
-      <div>Team yêu Barcelona</div>
-      <div>@2025 - Minh ultra promax</div>
+      <div>Hala Madrid</div>
+      <div>@2025 - Minh chim uncut</div>
     </div>
   )
 }
