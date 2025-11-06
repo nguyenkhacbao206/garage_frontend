@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { ColorStyle } from "../styles/colors"
-import { AiOutlineMenuFold } from "react-icons/ai";
+import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
-const HeaderManage = () => {
+const HeaderManage = (
+  {
+    setIsSider,
+    isSider
+  }:
+    {
+      setIsSider?: (a: boolean) => void
+      isSider?: boolean
+    }) => {
+
   return (
     <div
       style={{
@@ -23,8 +33,10 @@ const HeaderManage = () => {
           padding: "0 30px"
         }}
       >
-        <div>
-          <AiOutlineMenuFold size={23} />
+        <div
+          onClick={() => setIsSider?.(!isSider)}
+        >
+          {isSider ? <AiOutlineMenuFold size={23} /> : <AiOutlineMenuUnfold size={23} />}
         </div>
         <div>
           <button>Đăng nhập</button>

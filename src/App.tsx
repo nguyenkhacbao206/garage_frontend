@@ -4,8 +4,10 @@ import HeaderManage from "./layouts/header";
 import SiderManage from "./layouts/sider";
 import { ColorStyle } from "./styles/colors";
 import AllRoutes from "./Router";
+import { useState } from "react";
 
 function App() {
+  const [isSider, setIsSider] = useState<boolean>(true)
   return (
     <div
       style={{
@@ -14,9 +16,9 @@ function App() {
         backgroundColor: ColorStyle.BgBase
       }}
     >
-      <div><SiderManage /></div>
+      <div><SiderManage isSider={isSider} /></div>
       <div style={{ width: "100%" }}>
-        <HeaderManage />
+        <HeaderManage setIsSider={setIsSider} isSider={isSider} />
         <div style={{
           minHeight: "470px",
           padding: "10px"

@@ -3,10 +3,11 @@ import { ColorStyle } from "../styles/colors"
 import { AiOutlineAntDesign, AiOutlineCar, AiOutlineCodeSandbox, AiOutlineDollar, AiOutlineHome, AiOutlineLineChart, AiOutlinePlusCircle, AiOutlineTeam, AiOutlineTool } from "react-icons/ai";
 import { useState } from "react";
 
-const SiderManage = () => {
+const SiderManage = ({ isSider }: { isSider: boolean }) => {
   const styleLink = {
     display: "flex",
     alignItems: "center",
+    justifyContent: isSider ? "" : "center",
     gap: "10px",
     padding: "10px 14px",
     borderRadius: "8px",
@@ -33,9 +34,10 @@ const SiderManage = () => {
 
   return (
     <div style={{
-      width: 250,
+      width: isSider ? 250 : 80,
       backgroundColor: ColorStyle.SidebarBackground,
-      height: "100vh"
+      height: "100vh",
+      transition: "width 0.3s ease"
     }}>
       <div
         style={{
@@ -48,17 +50,17 @@ const SiderManage = () => {
         }}
       >
         <AiOutlineAntDesign size={40} />{" "}
-        <span style={{ marginLeft: 15 }}>Bổn lào</span>
+        {isSider ? <span style={{ marginLeft: 15 }}>Bổn lào</span> : <></>}
       </div>
 
       <div style={{ padding: "10px" }}>
         <div>
-          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground }}>Menu chính</div>
+          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground, }}>{isSider ? "Menu chính" : ""}</div>
           {[
-            { to: "/", icon: <AiOutlineHome />, label: "Tổng quan" },
-            { to: "/vehiclereception", icon: <AiOutlinePlusCircle />, label: "Tiếp nhận xe" },
-            { to: "/payment", icon: <AiOutlineDollar />, label: "Thanh toán" },
-            { to: "/statistical", icon: <AiOutlineLineChart />, label: "Thống kê" },
+            { to: "/", icon: <AiOutlineHome size={18} />, label: "Tổng quan" },
+            { to: "/vehiclereception", icon: <AiOutlinePlusCircle size={18} />, label: "Tiếp nhận xe" },
+            { to: "/payment", icon: <AiOutlineDollar size={18} />, label: "Thanh toán" },
+            { to: "/statistical", icon: <AiOutlineLineChart size={18} />, label: "Thống kê" },
           ].map((item) => (
             <Link
               key={item.to}
@@ -72,18 +74,17 @@ const SiderManage = () => {
               onMouseLeave={() => setHovered("")}
             >
               {item.icon}
-              {item.label}
+              {isSider ? item.label : ""}
             </Link>
           ))}
         </div>
 
         <div style={{ marginTop: "20px" }}>
-          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground }}>Quản lý</div>
-
+          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground, }}>{isSider ? "Quản lý" : ""}</div>
           {[
-            { to: "/customers", icon: <AiOutlineTeam />, label: "Khách hàng" },
-            { to: "/services", icon: <AiOutlineTool />, label: "Dịch vụ" },
-            { to: "/parts", icon: <AiOutlineCodeSandbox />, label: "Phụ tùng" },
+            { to: "/customers", icon: <AiOutlineTeam size={18} />, label: "Khách hàng" },
+            { to: "/services", icon: <AiOutlineTool size={18} />, label: "Dịch vụ" },
+            { to: "/parts", icon: <AiOutlineCodeSandbox size={18} />, label: "Phụ tùng" },
           ].map((item) => (
             <Link
               key={item.to}
@@ -97,7 +98,7 @@ const SiderManage = () => {
               onMouseLeave={() => setHovered("")}
             >
               {item.icon}
-              {item.label}
+              {isSider ? item.label : ""}
             </Link>
           ))}
         </div>
