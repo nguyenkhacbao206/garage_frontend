@@ -37,7 +37,10 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
       width: isSider ? 250 : 80,
       backgroundColor: ColorStyle.SidebarBackground,
       height: "100vh",
-      transition: "width 0.3s ease"
+      transition: "width 0.3s ease",
+      position: 'sticky',
+      zIndex: 1000000,
+      top: "0"
     }}>
       <div
         style={{
