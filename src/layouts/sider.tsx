@@ -1,6 +1,16 @@
+import "./layout.scss";
 import { Link, useLocation } from "react-router";
-import { ColorStyle } from "../styles/colors"
-import { AiOutlineAntDesign, AiOutlineCar, AiOutlineCodeSandbox, AiOutlineDollar, AiOutlineHome, AiOutlineLineChart, AiOutlinePlusCircle, AiOutlineTeam, AiOutlineTool } from "react-icons/ai";
+import { ColorStyle } from "../styles/colors";
+import {
+  AiOutlineAntDesign,
+  AiOutlineDollar,
+  AiOutlineHome,
+  AiOutlineLineChart,
+  AiOutlinePlusCircle,
+  AiOutlineTeam,
+  AiOutlineTool,
+  AiOutlineCodeSandbox,
+} from "react-icons/ai";
 import { useState } from "react";
 
 const SiderManage = ({ isSider }: { isSider: boolean }) => {
@@ -8,7 +18,7 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
     display: "flex",
     alignItems: "center",
     justifyContent: isSider ? "" : "center",
-    gap: "10px",
+    gap: isSider ? "10px" : "0",
     padding: "10px 14px",
     borderRadius: "8px",
     color: ColorStyle.SidebarForeground,
@@ -28,20 +38,22 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
     fontWeight: 600,
   };
 
-
   const location = useLocation();
   const [hovered, setHovered] = useState("");
 
   return (
-    <div style={{
-      width: isSider ? 250 : 80,
-      backgroundColor: ColorStyle.SidebarBackground,
-      height: "100vh",
-      transition: "width 0.3s ease",
-      position: 'sticky',
-      zIndex: 1000000,
-      top: "0"
-    }}>
+    <div
+      className={`sider-manage ${isSider ? "expanded" : "collapsed"}`}
+      style={{
+        width: isSider ? 250 : 80,
+        backgroundColor: ColorStyle.SidebarBackground,
+        height: "100vh",
+        transition: "width 0.3s ease",
+        position: "sticky",
+        zIndex: 1000000,
+        top: "0",
+      }}
+    >
       <div
         style={{
           height: "65px",
@@ -53,12 +65,12 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
         }}
       >
         <AiOutlineAntDesign size={40} />{" "}
-        {isSider ? <span style={{ marginLeft: 15 }}>Bổn lào</span> : <></>}
+        <span className="logo-text">{isSider ? "Bổn lào" : ""}</span>
       </div>
 
       <div style={{ padding: "10px" }}>
         <div>
-          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground, }}>{isSider ? "Menu chính" : ""}</div>
+          <div className={`menu-section-title ${isSider ? "expanded" : "collapsed"}`}>Menu chính</div>
           {[
             { to: "/", icon: <AiOutlineHome size={18} />, label: "Tổng quan" },
             { to: "/vehiclereception", icon: <AiOutlinePlusCircle size={18} />, label: "Tiếp nhận xe" },
@@ -77,13 +89,13 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
               onMouseLeave={() => setHovered("")}
             >
               {item.icon}
-              {isSider ? item.label : ""}
+              <span className="menu-label">{isSider ? item.label : ""}</span>
             </Link>
           ))}
         </div>
 
         <div style={{ marginTop: "20px" }}>
-          <div style={{ margin: "10px 0", fontWeight: 600, color: ColorStyle.MutedForeground, }}>{isSider ? "Quản lý" : ""}</div>
+          <div className={`menu-section-title ${isSider ? "expanded" : "collapsed"}`}>Quản lý</div>
           {[
             { to: "/customers", icon: <AiOutlineTeam size={18} />, label: "Khách hàng" },
             { to: "/services", icon: <AiOutlineTool size={18} />, label: "Dịch vụ" },
@@ -101,13 +113,13 @@ const SiderManage = ({ isSider }: { isSider: boolean }) => {
               onMouseLeave={() => setHovered("")}
             >
               {item.icon}
-              {isSider ? item.label : ""}
+              <span className="menu-label">{isSider ? item.label : ""}</span>
             </Link>
           ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default SiderManage
+export default SiderManage;
