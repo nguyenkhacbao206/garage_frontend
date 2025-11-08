@@ -25,7 +25,7 @@ const TableBase = <T,>({
   pageSize = 10,
 }: ITableBase<T>) => {
   const [pageNumber, setPagenumber] = useState<number>(1)
-  const totalPage = Math.ceil(dataSource.length / pageSize);
+  const totalPage = Math.ceil(dataSource?.length / pageSize);
   const slPage = Array.from({ length: totalPage });
   const getRowKey = (record: T, index: number) => {
     if (rowkey === "id") return (record as any)[rowkey] ?? index
@@ -43,16 +43,14 @@ const TableBase = <T,>({
   }
 
   const startPage = pageSize * (pageNumber - 1)
-  const dataTable = dataSource.slice(startPage, startPage + pageSize)
-
-  console.log(slPage, totalPage)
+  const dataTable = dataSource?.slice(startPage, startPage + pageSize)
 
   return (
     <div className="table-container">
       <table>
         <thead>
           <tr>
-            {columns.map((item) => (
+            {columns?.map((item) => (
               <th key={String(item.dataIndex)}>
                 {item.title}
               </th>
@@ -60,11 +58,11 @@ const TableBase = <T,>({
           </tr>
         </thead>
         <tbody>
-          {dataTable.map((record, index) => {
+          {dataTable?.map((record, index) => {
             const key = getRowKey(record, index);
             return (
               <tr key={key}>
-                {columns.map((col, index) => {
+                {columns?.map((col, index) => {
                   const value = record[col.dataIndex]
                   return (
                     <td key={index}>
@@ -103,7 +101,7 @@ const TableBase = <T,>({
           justifyContent: 'center',
           alignItems: "center",
         }}>
-          {slPage.map((item, index) => (
+          {slPage?.map((item, index) => (
             <Button
               style={{
                 display: "flex",
