@@ -1,50 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import BaseModal from "../../components/baseModal"
 import Button from "../../components/Button"
 import TableBase, { Column, ITableBase } from "../../components/BaseTable"
+import Form from "../../components/FormBase";
+import { getCustomers } from "../../services/api/customerApi";
 
-interface User {
-  id: number;
-  name: string;
-  age: number;
-  email: string;
-  address: string;
-}
 
 const DashBoard = () => {
   const [is, setIs] = useState(false)
-  const data = [
-    {
-      id: 1,
-      name: "Nguyễn Văn A",
-      age: 24,
-      email: "vana@example.com",
-      address: "Hà Nội",
-    },
-    {
-      id: 2,
-      name: "Trần Thị B",
-      age: 28,
-      email: "thib@example.com",
-      address: "Đà Nẵng",
-    },
-    {
-      id: 3,
-      name: "Lê Văn C",
-      age: 31,
-      email: "vanc@example.com",
-      address: "TP. Hồ Chí Minh",
-    },
-    {
-      id: 4,
-      name: "Phạm Thị D",
-      age: 26,
-      email: "thid@example.com",
-      address: "Cần Thơ",
-    },
-  ]
+  const [data, setData] = useState<any>()
 
-  const columns: Column<User>[] = [
+  const columns: Column<any>[] = [
     {
       title: "Tên",
       dataIndex: "name",
@@ -52,7 +18,7 @@ const DashBoard = () => {
     },
     {
       title: "Tuổi",
-      dataIndex: "age",
+      dataIndex: "phone",
       render: (value) => (<div>{value}</div>)
     },
     {
@@ -66,6 +32,10 @@ const DashBoard = () => {
       )
     }
   ]
+
+  useEffect(() => {
+    getCustomers().then(res => { setData(res.data) })
+  }, [])
 
   return (
     <div>
@@ -81,6 +51,22 @@ const DashBoard = () => {
         columns={columns}
         dataSource={data}
       />
+      <hr></hr>
+      <hr></hr>
+      <Form
+        initialValues={{ username: "minh", password: "" }}
+        onFinish={(values) => console.log("✅ Submitted:", values)}
+      >
+
+        <Form.Input name="username" placeholder="Username" />
+        <Form.Input name="password" type="password" placeholder="Password" disabled />
+
+        <Button
+          htmlType="submit"
+        >
+          Submit
+        </Button>
+      </Form>
       <p>Bảo là cậu bé Down made in china</p>
       <p>Bảo là cậu bé Down made in china</p>
       <p>Bảo là cậu bé Down made in china</p>

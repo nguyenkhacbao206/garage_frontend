@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { ColorStyle } from "../../styles/colors"
 
 interface IButtonProps {
-  type?: "primary" | "default" | "dashed" | "text" | "link" | "gradientPrimary"
-  children: React.ReactNode
-  onClick?: () => void
-  disabled?: boolean
-  style?: React.CSSProperties
+  type?: "primary" | "default" | "dashed" | "text" | "link" | "gradientPrimary",
+  children: React.ReactNode,
+  onClick?: () => void,
+  disabled?: boolean,
+  style?: React.CSSProperties,
+  htmlType?: "button" | "submit" | "reset"
 }
 
 const Button = ({
@@ -15,6 +16,7 @@ const Button = ({
   onClick,
   disabled = false,
   style,
+  htmlType = "button",
 }: IButtonProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [isPressed, setIsPressed] = useState(false)
@@ -98,6 +100,7 @@ const Button = ({
             : "0 2px 0 rgba(0,0,0,0.02)",
         ...style,
       }}
+      type={htmlType}
     >
       {children}
     </button>
