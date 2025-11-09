@@ -22,6 +22,36 @@ const DashBoard = () => {
       render: (value) => (<div>{value}</div>)
     },
     {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div>{value}</div>)
+    },
+    {
       title: "Email & địa chỉ",
       dataIndex: "email",
       render: (value, record) => (
@@ -34,7 +64,7 @@ const DashBoard = () => {
   ]
 
   useEffect(() => {
-    getCustomers().then(res => { setData(res.data) })
+    getCustomers().then(res => { setData(res?.data) })
   }, [])
 
   return (

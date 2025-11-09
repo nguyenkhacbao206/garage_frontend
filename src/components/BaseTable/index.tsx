@@ -1,6 +1,6 @@
 import { useState } from "react"
 import "./table.scss"
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
+import { AiOutlineFrown, AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
 import { ColorStyle } from "../../styles/colors"
 import Button from "../Button"
 
@@ -47,34 +47,69 @@ const TableBase = <T,>({
 
   return (
     <div className="table-container">
-      <table>
-        <thead>
-          <tr>
-            {columns?.map((item) => (
-              <th key={String(item.dataIndex)}>
-                {item.title}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {dataTable?.map((record, index) => {
-            const key = getRowKey(record, index);
-            return (
-              <tr key={key}>
-                {columns?.map((col, index) => {
-                  const value = record[col.dataIndex]
-                  return (
-                    <td key={index}>
-                      {col.render ? col.render(value, record, index) : String(value ?? "")}
-                    </td>
-                  )
-                })}
+      <div
+        style={{
+          width: "100%",
+          overflowX: "auto",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+          }}
+        >
+          <thead>
+            <tr>
+              {columns?.map((item) => (
+                <th key={String(item.dataIndex)}>
+                  {item.title}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {dataSource ? dataTable?.map((record, index) => {
+              const key = getRowKey(record, index);
+              return (
+                <tr key={key}>
+                  {columns?.map((col, index) => {
+                    const value = record[col.dataIndex]
+                    return (
+                      <td key={index}>
+                        {col.render ? col.render(value, record, index) : String(value ?? "")}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            }) :
+              <tr style={{ background: "#fafafa" }}>
+                <td
+                  colSpan={columns?.length}
+                  style={{
+                    padding: "32px 0",
+                    color: "#888",
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "column",
+                      gap: "8px",
+                      fontSize: "15px",
+                    }}
+                  >
+                    <div><AiOutlineFrown size={30} /></div>
+                    <span>Không có dữ liệu</span>
+                  </div>
+                </td>
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
+            }
+          </tbody>
+        </table>
+      </div>
       <div style={{
         display: "flex",
         justifyContent: "end",
