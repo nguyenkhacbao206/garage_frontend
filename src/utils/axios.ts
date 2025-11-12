@@ -9,7 +9,6 @@ const axios = axios1.create({
   timeout: 10000,
 })
 
-// Request Interceptor
 axios.interceptors.request.use(
   (config) => {
     // const token = localStorage.getItem('token');
@@ -22,9 +21,13 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response Interceptor
 axios.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    return {
+      ...response.data,
+      success: true,
+    }
+  },
   (error) => {
     const status = error?.response?.status
     const data = error?.response?.data

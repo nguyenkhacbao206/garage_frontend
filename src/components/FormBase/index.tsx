@@ -58,3 +58,15 @@ function FormInput({ name, style, ...rest }: IFormInputProps) {
 Form.Input = FormInput;
 
 export default Form;
+
+export const Input = ({ name, style, ...rest }: IFormInputProps) => {
+
+  return (
+    <input
+      {...rest}
+      name={name}
+      className="input-base"
+      style={{ ...style }}
+    />
+  );
+}

@@ -2,9 +2,10 @@ interface ITag {
   color?: any,
   style?: any,
   children: React.ReactNode
+  onClick?: () => void
 }
 
-const Tag = ({ color, children, style }: ITag) => {
+const Tag = ({ color, children, style, onClick }: ITag) => {
   const colorMap = {
     magenta: { bg: "#fff0f6", text: "#c41d7f", border: "#ffadd2" },
     red: { bg: "#fff1f0", text: "#cf1322", border: "#ffa39e" },
@@ -34,7 +35,7 @@ const Tag = ({ color, children, style }: ITag) => {
     ...style
   };
 
-  return <span style={styleTag}>{children}</span>;
+  return <span onClick={onClick} style={styleTag}>{children}</span>;
 }
 
 export default Tag
