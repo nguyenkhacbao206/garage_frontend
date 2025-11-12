@@ -4,6 +4,7 @@ import Button from "../../components/Button"
 import TableBase, { Column, ITableBase } from "../../components/BaseTable"
 import Form from "../../components/FormBase";
 import { getCustomers } from "../../services/api/customerApi";
+import { notify } from "../../components/Notification";
 
 
 const DashBoard = () => {
@@ -14,27 +15,57 @@ const DashBoard = () => {
     {
       title: "Tên",
       dataIndex: "name",
-      render: (value) => (<div>{value}</div>)
+      render: (value) => (<div key={value}>{value}</div>)
     },
     {
       title: "Tuổi",
       dataIndex: "phone",
-      render: (value) => (<div>{value}</div>)
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "phone",
+      render: (value) => (<div key={value}>{value}</div>)
     },
     {
       title: "Email & địa chỉ",
       dataIndex: "email",
       render: (value, record) => (
-        <>
+        <div key={value}>
           <div>{value}</div>
           <div>{record.address}</div>
-        </>
+        </div>
       )
     }
   ]
 
   useEffect(() => {
-    getCustomers().then(res => { setData(res.data) })
+    getCustomers().then(res => { setData(res?.data) })
   }, [])
 
   return (
@@ -45,7 +76,7 @@ const DashBoard = () => {
         <b>bạn là con chó
         </b>
       </BaseModal>
-      <Button type={"gradientPrimary"} onClick={() => { setIs(true) }}>+ click đi</Button>
+      <Button type={"gradientPrimary"} onClick={() => { notify({ type: 'info', title: 'Thành công!', description: 'Thao tác hoàn tất.' }) }}>+ click đi</Button>
       <hr />
       <TableBase
         columns={columns}

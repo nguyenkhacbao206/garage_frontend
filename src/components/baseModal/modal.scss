@@ -1,11 +1,13 @@
 .modal-overlay {
   position: fixed;
+  top:0;
+  left: 0;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 100000000;
 
   &.open {
     animation: fadeIn 0.2s ease forwards;
@@ -18,7 +20,7 @@
 
 .modal-container {
   position: relative;
-  z-index: 1010;
+  z-index: 100000001;
   background-color: #fff;
   padding: 15px;
   min-height: 100px;
