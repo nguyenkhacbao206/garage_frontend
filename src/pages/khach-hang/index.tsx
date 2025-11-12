@@ -4,15 +4,21 @@ import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import Tag from "../../components/Tag"
 import BaseModal from "../../components/baseModal"
-import FormCustomer from "./components/Form"
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai"
+import FormCustomer from "./components/form"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
+import { Input } from "../../components/FormBase"
+import { notify } from "../../components/Notification"
 
 const Customers = () => {
   const [dataCustomer, setDataCustomer] = useState<MCustomer.IRecord[]>([])
   const [isModal, setIsModal] = useState<boolean>(false)
+  const [isModalCar, setIsModalCar] = useState<boolean>(false)
+  const [isModalDel, setIsModalDel] = useState<boolean>(false)
   const [dataCustomerId, setDataCustomerId] = useState<MCustomer.IRecord>()
+  const [dataCar, setDataCar] = useState<any[]>([])
   const [method, setMethod] = useState<"post" | "put">("post")
   const [isReload, setIsReload] = useState<boolean>(true)
+  const [idKHdel, setIdKHdel] = useState<string>()
 
   const Columns: Column<MCustomer.IRecord>[] = [
     {
@@ -54,7 +60,13 @@ const Customers = () => {
       title: "Số xe",
       dataIndex: "cars",
       render: (value, record, index) => (
-        <Tag style={{ width: 45 }}>{record.cars?.length ?? 0} xe</Tag>
+        <Tag
+          style={{ width: 45, hoverPointer: true }}
+          onClick={() => {
+            setDataCar(record.cars as any[])
+            setIsModalCar(true)
+          }}
+        >{record.cars?.length ?? 0} xe</Tag>
       ),
     },
     {
@@ -68,7 +80,7 @@ const Customers = () => {
       title: "Thao tác",
       render: (value, record, index) => (
         <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
-          <Button onClick={() => delModal(record?.id)} type="error" style={{
+          <Button onClick={() => { setIdKHdel(record?.id); setIsModalDel(true) }} type="error" style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -90,8 +102,29 @@ const Customers = () => {
     },
   ]
 
+  const columnsCar: Column<any>[] = [
+    {
+      title: "Biển số",
+      dataIndex: "plate",
+    },
+    {
+      title: "Kiểu xe",
+      dataIndex: "model"
+    },
+    {
+      title: "Hãng xe",
+      dataIndex: "manufacturer"
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "description"
+    }
+  ]
+
   const delModal = async (id: any) => {
     await delCustomer(id)
+    notify({ title: "Delete", type: "error", description: "Thông tin khách hàng đã được xóa thành công" })
+    setIsModalDel(false)
     setIsReload(!isReload)
   }
   const setModal = (data?: MCustomer.IRecord, method?: "post" | "put") => {
@@ -106,12 +139,47 @@ const Customers = () => {
 
   return (
     <>
+      {/* modal form */}
       <BaseModal
         isOpen={isModal}
         closeModal={() => setIsModal(false)}
       >
         <FormCustomer isReload={isReload} setIsReload={setIsReload} valueInitial={dataCustomerId} method={method} setIsModal={setIsModal} />
       </BaseModal>
+
+      {/* modal xe */}
+      <BaseModal
+        isOpen={isModalCar}
+        closeModal={() => setIsModalCar(false)}
+      >
+        <div style={{ width: 700 }}>
+          <h4>Danh sách xe của khách hàng</h4>
+          <TableBase
+            columns={columnsCar}
+            dataSource={dataCar}
+            pageSize={5}
+          />
+        </div>
+      </BaseModal>
+
+      {/* modal xóa */}
+      <BaseModal
+        isOpen={isModalDel}
+        closeModal={() => setIsModalDel(false)}
+      >
+        <div>
+          <AiTwotoneCloseCircle />
+          <h5>Are you sure ?</h5>
+          <p>are you sure you would like to do this</p>
+          <div>
+            <Button onClick={() => setIsModalDel(false)}>Cancel</Button>
+            <Button onClick={() => delModal(idKHdel)} type="error">Confirm</Button>
+          </div>
+        </div>
+
+      </BaseModal>
+
+
       <div
         style={{
           display: "flex",
@@ -129,6 +197,19 @@ const Customers = () => {
         <div>
           <Button onClick={() => setModal(undefined, 'post')} style={{ padding: "10px 20px" }} type="gradientPrimary">+ Thêm khách hàng</Button>
         </div>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
+        <AiOutlineSearch />
+        <Input
+          name="search"
+          style={{
+            width: 230,
+            margin: "10px 10px",
+            marginRight: "25px ",
+            borderRadius: 7
+          }}
+          placeholder="Tìm theo tên, sdt, ..."
+        />
       </div>
       <TableBase
         columns={Columns}

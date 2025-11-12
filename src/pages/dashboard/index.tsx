@@ -78,10 +78,10 @@ const DashBoard = () => {
       </BaseModal>
       <Button type={"gradientPrimary"} onClick={() => { notify({ type: 'info', title: 'Thành công!', description: 'Thao tác hoàn tất.' }) }}>+ click đi</Button>
       <hr />
-      <TableBase
+      {/* <TableBase
         columns={columns}
         dataSource={data}
-      />
+      /> */}
       <hr></hr>
       <hr></hr>
       <Form

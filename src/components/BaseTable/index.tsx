@@ -68,7 +68,7 @@ const TableBase = <T,>({
             </tr>
           </thead>
           <tbody>
-            {dataSource ? dataTable?.map((record, index) => {
+            {(dataSource && dataSource.length !== 0) ? dataTable?.map((record, index) => {
               const key = getRowKey(record, index);
               return (
                 <tr key={key}>
