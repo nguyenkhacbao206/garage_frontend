@@ -5,7 +5,7 @@ import "./modal.scss";
 interface ICustomModalProps {
   isOpen: boolean;
   closeModal?: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const BaseModal = ({ isOpen, closeModal, children }: ICustomModalProps) => {

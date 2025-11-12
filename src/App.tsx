@@ -26,7 +26,7 @@ function App() {
         <HeaderManage setIsSider={setIsSider} isSider={isSider} />
         <div style={{
           minHeight: "470px",
-          padding: "10px",
+          padding: "10px 20px",
           marginTop: "65px",
           marginLeft: !isMobile ? "0px" : isSider ? "250px" : "80px",
           transition: "margin-left 0.3s ease",

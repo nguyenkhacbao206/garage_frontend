@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { ColorStyle } from "../../styles/colors"
 
 interface IButtonProps {
-  type?: "primary" | "default" | "dashed" | "text" | "link" | "gradientPrimary",
+  type?: "primary" | "default" | "dashed" | "text" | "link" | "gradientPrimary" | "error",
   children: React.ReactNode,
   onClick?: () => void,
   disabled?: boolean,
@@ -61,6 +61,13 @@ const Button = ({
       bg: ColorStyle.GradientPrimary,
       hover: "linear-gradient(135deg, hsl(221 83% 40%), hsl(189 94% 50%))",
       active: "linear-gradient(135deg, hsl(221 83% 30%), hsl(189 94% 38%))",
+      color: "#fff",
+      border: "none",
+    },
+    error: {
+      bg: "#ff4d4f",
+      hover: "#ff7875",
+      active: "#d9363e",
       color: "#fff",
       border: "none",
     },

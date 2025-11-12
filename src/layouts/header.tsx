@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ColorStyle } from "../styles/colors"
 import { AiOutlineMenu, AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { useBreakpoint } from "../hooks/useBreakpoint";
+import Button from "../components/Button";
 
 const HeaderManage = (
   {
@@ -47,7 +48,7 @@ const HeaderManage = (
           {!isMobile ? <AiOutlineMenu /> : isSider ? <AiOutlineMenuFold size={23} /> : <AiOutlineMenuUnfold size={23} />}
         </div>
         <div>
-          <button>Đăng nhập</button>
+          <Button>Đăng nhập</Button>
         </div>
       </div>
     </div>

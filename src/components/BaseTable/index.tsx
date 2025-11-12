@@ -6,7 +6,7 @@ import Button from "../Button"
 
 export type Column<T = any> = {
   title: string,
-  dataIndex: keyof T,
+  dataIndex?: keyof T,
   render?: (value: any, record: T, index: number) => React.ReactNode
 }
 
@@ -73,7 +73,7 @@ const TableBase = <T,>({
               return (
                 <tr key={key}>
                   {columns?.map((col, index) => {
-                    const value = record[col.dataIndex]
+                    const value = col.dataIndex ? record[col.dataIndex] : undefined;
                     return (
                       <td key={index}>
                         {col.render ? col.render(value, record, index) : String(value ?? "")}
@@ -138,6 +138,7 @@ const TableBase = <T,>({
         }}>
           {slPage?.map((item, index) => (
             <Button
+              key={index}
               style={{
                 display: "flex",
                 justifyContent: 'center',

@@ -68,7 +68,12 @@ axios.interceptors.response.use(
         console.log('Có lỗi không xác định. Vui lòng thử lại sau.')
     }
 
-    return Promise.resolve(null);
+    return Promise.resolve({
+      success: false,
+      status,
+      message: description,
+      data: null,
+    });
   }
 )
 
