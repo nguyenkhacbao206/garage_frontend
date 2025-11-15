@@ -4,13 +4,6 @@ import Button from "../../../components/Button"
 import { postService, putService } from "../../../services/api/servicesApi"
 import { notify } from "../../../components/Notification"
 
-interface ApiResponse<T = any> {
-  success?: boolean
-  message?: string
-  status?: number
-  data?: T
-}
-
 interface IFormService {
   valueInitial?: MService.IRecord
   method: "post" | "put"
@@ -20,36 +13,38 @@ interface IFormService {
 }
 
 const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }: IFormService) => {
-const onSubmit = async (data: MService.IRecord) => {
-  const payload: MService.IRecord = {
-    id: valueInitial?.id || "",
-    name: data.name,
-    price: Number(data.price),
-    description: data.description
-  }
+  
+  const onSubmit = async (data: MService.IRecord) => {
+    
+    const payload = {
+      name: data.name,
+      price: Number(data.price),
+      description: data.description || "",
+      serviceCode: method === 'post' 
+        ? `DV-${Math.floor(Math.random() * 100000)}` 
+        : valueInitial?.serviceCode
+    }
 
-  if (method === "post") {
-    const res = await postService(payload)
-    if (res.success) {
-      notify({ title: "Success", type: "success", description: "Đã thêm dịch vụ thành công" })
+    let res
+    if (method === "post") {
+      res = await postService(payload as any)
+    } else {
+      if (!valueInitial?.id) return
+      res = await putService(valueInitial.id, payload as any)
+    }
+
+    if (res?.success) {
+      notify({
+        title: "Success",
+        type: "success",
+        description: method === "post" ? "Đã thêm dịchví thành công" : "Thông tin dịch vụ đã được cập nhật",
+      })
       setIsReload?.(!isReload)
       setIsModal?.(false)
     } else {
-      notify({ title: "Error", type: "error", description: res.message })
-    }
-  } else if (method === "put") {
-    if (!valueInitial?.id) return
-    const res = await putService(valueInitial.id, payload)
-    if (res.success) {
-      notify({ title: "Success", type: "success", description: "Thông tin dịch vụ đã được cập nhật" })
-      setIsReload?.(!isReload)
-      setIsModal?.(false)
-    } else {
-      notify({ title: "Error", type: "error", description: res.message })
+      notify({ title: "Error", type: "error", description: (res as any)?.message || "Có lỗi xảy ra" })
     }
   }
-}
-
 
   return (
     <Container style={{ maxWidth: "550px" }}>

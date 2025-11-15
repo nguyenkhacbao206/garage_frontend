@@ -8,6 +8,20 @@ import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle }
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 
+const convertBrokenObjectToArray = (res: any): MService.IRecord[] => {
+  if (!res) return []
+  
+  // Nếu res.data tồn tại trả về mảng rỗng
+  if (res.data) return []
+
+  // Nếu res là đối tượng { "0": ..., "1": ... }
+  const dataArray = Object.keys(res)
+    .filter(key => !isNaN(Number(key)))
+    .map(key => (res as any)[key]);
+
+  return dataArray
+}
+
 const Services = () => {
   const [dataService, setDataService] = useState<MService.IRecord[]>([])
   const [isModal, setIsModal] = useState(false)
@@ -48,10 +62,15 @@ const Services = () => {
 
   const handleDelete = async (id?: string) => {
     if (!id) return
-    await delService(id)
-    notify({ title: "Delete", type: "error", description: "Dịch vụ đã được xóa thành công" })
-    setIsModalDel(false)
-    setIsReload(!isReload)
+    
+    const res = await delService(id)
+    if (res?.success) {
+      notify({ title: "Delete", type: "error", description: "Dịch vụ đã được xóa thành công" })
+      setIsModalDel(false)
+      setIsReload(!isReload)
+    } else {
+      notify({ title: "Error", type: "error", description: (res as any)?.message || "Xóa thất bại" })
+    }
   }
 
   // Debounce search
@@ -69,7 +88,10 @@ const Services = () => {
         } else {
           res = await getServices()
         }
-        setDataService(res?.data || [])
+
+        const workingArray = convertBrokenObjectToArray(res)
+        setDataService(workingArray)
+
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu dịch vụ:", error)
         setDataService([])
