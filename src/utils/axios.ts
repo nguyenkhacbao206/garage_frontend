@@ -116,7 +116,7 @@ axios.interceptors.response.use(
 
           console.log('Refresh token thành công, lưu token mới');
 
-          setCookie('accessToken', newAccessToken, 1);
+          setCookie('accessToken', newAccessToken, 15);
 
           // Lưu refreshToken mới nếu có
           if (responseData?.refreshToken || res.data?.refreshToken) {
