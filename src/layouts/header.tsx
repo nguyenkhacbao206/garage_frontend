@@ -3,6 +3,9 @@ import { ColorStyle } from "../styles/colors"
 import { AiOutlineMenu, AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { useBreakpoint } from "../hooks/useBreakpoint";
 import Button from "../components/Button";
+import { useNavigate } from "react-router";
+import { deleteCookie, getCookie } from "../utils/cookie";
+import { notify } from "../components/Notification";
 
 const HeaderManage = (
   {
@@ -16,6 +19,15 @@ const HeaderManage = (
 
   const screen = useBreakpoint()
   const isMobile = screen.sm
+  const navigate = useNavigate()
+  const token = getCookie("refreshToken")
+
+  const logout = () => {
+    deleteCookie("accessToken")
+    deleteCookie("refreshToken")
+    notify({ title: "Success", type: "success", description: "Đăng xuất thành công" })
+    navigate("/login")
+  }
 
   return (
     <div
@@ -48,7 +60,7 @@ const HeaderManage = (
           {!isMobile ? <AiOutlineMenu /> : isSider ? <AiOutlineMenuFold size={23} /> : <AiOutlineMenuUnfold size={23} />}
         </div>
         <div>
-          <Button>Đăng nhập</Button>
+          <Button onClick={() => logout()}>Đăng xuất</Button>
         </div>
       </div>
     </div>

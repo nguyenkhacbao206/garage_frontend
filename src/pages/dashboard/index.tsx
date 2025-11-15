@@ -10,6 +10,7 @@ import { notify } from "../../components/Notification";
 const DashBoard = () => {
   const [is, setIs] = useState(false)
   const [data, setData] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(true)
 
   const columns: Column<any>[] = [
     {
@@ -76,7 +77,7 @@ const DashBoard = () => {
         <b>bạn là con chó
         </b>
       </BaseModal>
-      <Button type={"gradientPrimary"} onClick={() => { notify({ type: 'info', title: 'Thành công!', description: 'Thao tác hoàn tất.' }) }}>+ click đi</Button>
+      <Button type={"gradientPrimary"} onClick={() => { notify({ type: 'info', title: 'Đúng vậy', description: 'Bảo bị bysexual thật' }) }}>+ click đi</Button>
       <hr />
       {/* <TableBase
         columns={columns}
