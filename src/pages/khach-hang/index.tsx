@@ -163,7 +163,7 @@ const Customers = () => {
     }
   }
   const setModal = (data?: MCustomer.IRecord, method?: "post" | "put") => {
-    setDataCustomerId(data || {})
+    setDataCustomerId(data)
     setMethod(method || "post")
     setIsModal(true)
   }
