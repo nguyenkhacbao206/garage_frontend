@@ -14,7 +14,7 @@ const Login = () => {
     const res: any = await postAuthLogin(value)
     if (res?.success) {
       notify({ title: "Success", type: "success", description: "Đăng nhập thành công" })
-      setCookie("accessToken", res.accessToken, 1)
+      setCookie("accessToken", res.accessToken, 15)
       setCookie("refreshToken", res.refreshToken, 7 * 24 * 60)
       navigate("/")
     } else {
