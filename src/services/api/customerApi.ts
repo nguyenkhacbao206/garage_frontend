@@ -11,12 +11,12 @@ const getCustomerId = async (id: string) => {
   return res
 }
 
-const postCustomer = async (data: any) => {
+const postCustomer = async (data: MCustomer.IRecord) => {
   const res = await axios.post(ipCustomer, data)
   return res
 }
 
-const putCustomer = async (id: string, data: any) => {
+const putCustomer = async (id: string, data: MCustomer.IRecord) => {
   const res = await axios.put(ipCustomer + `/${id}`, data)
   return res
 }

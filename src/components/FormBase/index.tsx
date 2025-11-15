@@ -7,7 +7,7 @@ export interface IFormProps {
   initialValues?: Record<string, any>;
   onFinish?: (values: Record<string, any>) => void;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export interface IFormInputProps
@@ -32,7 +32,7 @@ function Form(props: IFormProps) {
 
   return (
     <FormContext.Provider value={{ values, setFieldValue }}>
-      <form onSubmit={handleSubmit} className={className}>
+      <form onSubmit={handleSubmit} className={className} >
         {children}
       </form>
     </FormContext.Provider>
@@ -58,3 +58,15 @@ function FormInput({ name, style, ...rest }: IFormInputProps) {
 Form.Input = FormInput;
 
 export default Form;
+
+export const Input = ({ name, style, ...rest }: IFormInputProps) => {
+
+  return (
+    <input
+      {...rest}
+      name={name}
+      className="input-base"
+      style={{ ...style }}
+    />
+  );
+}
