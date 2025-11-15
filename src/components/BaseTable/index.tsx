@@ -3,10 +3,12 @@ import "./table.scss"
 import { AiOutlineFrown, AiOutlineLeft, AiOutlineRight } from "react-icons/ai"
 import { ColorStyle } from "../../styles/colors"
 import Button from "../Button"
+import { FourSquare } from "react-loading-indicators"
 
 export type Column<T = any> = {
   title: string,
   dataIndex?: keyof T,
+  width?: number,
   render?: (value: any, record: T, index: number) => React.ReactNode
 }
 
@@ -15,6 +17,8 @@ export interface ITableBase<T = any> {
   dataSource: T[],
   rowkey?: string,
   pageSize?: number,
+  loading?: boolean,
+  width?: number
 }
 
 
@@ -23,6 +27,7 @@ const TableBase = <T,>({
   dataSource,
   rowkey = "id",
   pageSize = 10,
+  loading = false,
 }: ITableBase<T>) => {
   const [pageNumber, setPagenumber] = useState<number>(1)
   const totalPage = Math.ceil(dataSource?.length / pageSize);
@@ -61,51 +66,52 @@ const TableBase = <T,>({
           <thead>
             <tr>
               {columns?.map((item) => (
-                <th key={String(item.dataIndex)}>
+                <th style={{ width: item?.width }} key={String(item.dataIndex)}>
                   {item.title}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {(dataSource && dataSource.length !== 0) ? dataTable?.map((record, index) => {
-              const key = getRowKey(record, index);
-              return (
-                <tr key={key}>
-                  {columns?.map((col, index) => {
-                    const value = col.dataIndex ? record[col.dataIndex] : undefined;
-                    return (
-                      <td key={index}>
-                        {col.render ? col.render(value, record, index) : String(value ?? "")}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            }) :
-              <tr style={{ background: "#fafafa" }}>
-                <td
-                  colSpan={columns?.length}
-                  style={{
-                    padding: "32px 0",
-                    color: "#888",
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-                  <div
+            {loading ? <tr><td colSpan={columns?.length} style={{ textAlign: "center", paddingTop: "30px" }}><FourSquare color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} size="small" /><p>Đang tải dữ liệu ...</p></td></tr>
+              : (dataSource && dataSource.length !== 0) ? dataTable?.map((record, index) => {
+                const key = getRowKey(record, index);
+                return (
+                  <tr key={key}>
+                    {columns?.map((col, index) => {
+                      const value = col.dataIndex ? record[col.dataIndex] : undefined;
+                      return (
+                        <td key={index}>
+                          {col.render ? col.render(value, record, index) : String(value ?? "")}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              }) :
+                <tr style={{ background: "#fafafa" }}>
+                  <td
+                    colSpan={columns?.length}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      flexDirection: "column",
-                      gap: "8px",
-                      fontSize: "15px",
+                      padding: "32px 0",
+                      color: "#888",
+                      borderBottom: "1px solid #eee",
                     }}
                   >
-                    <div><AiOutlineFrown size={30} /></div>
-                    <span>Không có dữ liệu</span>
-                  </div>
-                </td>
-              </tr>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        gap: "8px",
+                        fontSize: "15px",
+                      }}
+                    >
+                      <div><AiOutlineFrown size={30} /></div>
+                      <span>Không có dữ liệu</span>
+                    </div>
+                  </td>
+                </tr>
             }
           </tbody>
         </table>

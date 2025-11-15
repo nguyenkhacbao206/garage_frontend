@@ -1,5 +1,7 @@
 import App from "../App";
 import Error404 from "../components/Error404";
+import Login from "../components/login";
+import Register from "../components/register";
 import DashBoard from "../pages/dashboard";
 import ServiceGarage from "../pages/dich-vu";
 import Customers from "../pages/khach-hang";
@@ -42,6 +44,14 @@ export const elementRoute = [
         element: <PartCars />
       },
     ]
+  },
+  {
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/Register",
+    element: <Register />
   },
   {
     path: "*",
