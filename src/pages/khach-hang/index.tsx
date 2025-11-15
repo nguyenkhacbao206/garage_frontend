@@ -8,6 +8,9 @@ import FormCustomer from "./components/form"
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
+import { ColorStyle } from "../../styles/colors"
+import { IoIosCloseCircleOutline } from "react-icons/io";
+
 
 const Customers = () => {
   const [dataCustomer, setDataCustomer] = useState<MCustomer.IRecord[]>([])
@@ -18,6 +21,7 @@ const Customers = () => {
   const [dataCar, setDataCar] = useState<any[]>([])
   const [method, setMethod] = useState<"post" | "put">("post")
   const [isReload, setIsReload] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true)
   const [idKHdel, setIdKHdel] = useState<string>()
 
   const Columns: Column<MCustomer.IRecord>[] = [
@@ -118,14 +122,45 @@ const Customers = () => {
     {
       title: "Mô tả",
       dataIndex: "description"
-    }
+    },
+    {
+      title: "Thao tác",
+      width: 80,
+      render: (value, record, index) => (
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+          <Button onClick={() => { setIdKHdel(record?.id); setIsModalDel(true) }} type="error" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px",
+            marginRight: 2
+          }}><AiOutlineDelete /></Button>
+          <Button onClick={() => setModal(record, "put")} type="primary" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px"
+          }}><AiOutlineEdit /></Button>
+        </div>
+      ),
+    },
   ]
 
   const delModal = async (id: any) => {
-    await delCustomer(id)
-    notify({ title: "Delete", type: "error", description: "Thông tin khách hàng đã được xóa thành công" })
-    setIsModalDel(false)
-    setIsReload(!isReload)
+    const res = await delCustomer(id)
+    if (!res.status) {
+      notify({ title: "Delete", type: "error", description: "Thông tin khách hàng đã được xóa thành công" })
+      setIsModalDel(false)
+      setIsReload(!isReload)
+    } else {
+      notify({ title: "Delete", type: "error", description: "Xóa thông tin khách hàng không thành công" })
+      setIsModalDel(false)
+      setIsReload(!isReload)
+    }
   }
   const setModal = (data?: MCustomer.IRecord, method?: "post" | "put") => {
     setDataCustomerId(data || {})
@@ -135,6 +170,7 @@ const Customers = () => {
 
   useEffect(() => {
     getCustomers().then(res => setDataCustomer(res?.data))
+    setLoading(false)
   }, [isReload])
 
   return (
@@ -167,12 +203,17 @@ const Customers = () => {
         isOpen={isModalDel}
         closeModal={() => setIsModalDel(false)}
       >
-        <div>
-          <AiTwotoneCloseCircle />
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: 'column'
+        }}>
+          <IoIosCloseCircleOutline style={{ fontSize: 70, color: ColorStyle.Error }} />
           <h5>Are you sure ?</h5>
           <p>are you sure you would like to do this</p>
           <div>
-            <Button onClick={() => setIsModalDel(false)}>Cancel</Button>
+            <Button style={{ marginRight: 10 }} onClick={() => setIsModalDel(false)}>Cancel</Button>
             <Button onClick={() => delModal(idKHdel)} type="error">Confirm</Button>
           </div>
         </div>
@@ -214,6 +255,7 @@ const Customers = () => {
       <TableBase
         columns={Columns}
         dataSource={dataCustomer}
+        loading={loading}
       />
     </>
   )
