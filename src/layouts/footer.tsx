@@ -4,7 +4,7 @@ const FooterManage = () => {
       textAlign: "center",
       padding: "10px 0"
     }}>
-      <div>Hala Vadrid</div>
+      <div>visca varca</div>
       <div>@2025 - bao bi down</div>
     </div>
   )
