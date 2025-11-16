@@ -10,6 +10,8 @@ import {
   AiOutlineTeam,
   AiOutlineTool,
   AiOutlineCodeSandbox,
+  AiOutlineBranches,
+  AiOutlineCar,
 } from "react-icons/ai";
 import { useState } from "react";
 import { useBreakpoint } from "../hooks/useBreakpoint";
@@ -118,8 +120,10 @@ const SiderManage = ({ isSider, setIsSider }: { isSider: boolean, setIsSider?: (
             <div className={`menu-section-title ${isSider ? "expanded" : "collapsed"}`}>Quản lý</div>
             {[
               { to: "/customers", icon: <AiOutlineTeam size={18} />, label: "Khách hàng" },
+              { to: "/cars", icon: <AiOutlineCar size={18} />, label: "Xe" },
               { to: "/services", icon: <AiOutlineTool size={18} />, label: "Dịch vụ" },
               { to: "/parts", icon: <AiOutlineCodeSandbox size={18} />, label: "Phụ tùng" },
+              { to: "/technicians", icon: <AiOutlineBranches size={18} />, label: "Kỹ thuật viên" },
             ].map((item) => (
               <Link
                 key={item.to}
