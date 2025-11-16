@@ -56,16 +56,6 @@ const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }
           </Col>
 
           <Col sm={12}>
-            <label className="form-label required" style={{ margin: 5 }}>Mã dịch vụ</label>
-            <Form.Input 
-              name="serviceCode" 
-              placeholder="Ví dụ: DV-001" 
-              required 
-              disabled={method === "put"}
-            />
-          </Col>
-
-          <Col sm={12}>
             <label className="form-label required" style={{ margin: 5 }}>Giá (VNĐ)</label>
             <Form.Input name="price" placeholder="Giá dịch vụ" type="number" required />
           </Col>
