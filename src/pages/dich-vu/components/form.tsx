@@ -16,13 +16,12 @@ const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }
   
   const onSubmit = async (data: MService.IRecord) => {
     
+
     const payload = {
       name: data.name,
       price: Number(data.price),
       description: data.description || "",
-      serviceCode: method === 'post' 
-        ? `DV-${Math.floor(Math.random() * 100000)}` 
-        : valueInitial?.serviceCode
+      serviceCode: data.serviceCode //
     }
 
     let res
@@ -37,7 +36,7 @@ const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }
       notify({
         title: "Success",
         type: "success",
-        description: method === "post" ? "Đã thêm dịchví thành công" : "Thông tin dịch vụ đã được cập nhật",
+        description: method === "post" ? "Đã thêm dịch vụ thành công" : "Thông tin dịch vụ đã được cập nhật",
       })
       setIsReload?.(!isReload)
       setIsModal?.(false)
@@ -55,6 +54,17 @@ const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }
             <label className="form-label required" style={{ margin: 5 }}>Tên dịch vụ</label>
             <Form.Input name="name" placeholder="Tên dịch vụ" required />
           </Col>
+
+          <Col sm={12}>
+            <label className="form-label required" style={{ margin: 5 }}>Mã dịch vụ</label>
+            <Form.Input 
+              name="serviceCode" 
+              placeholder="Ví dụ: DV-001" 
+              required 
+              disabled={method === "put"}
+            />
+          </Col>
+
           <Col sm={12}>
             <label className="form-label required" style={{ margin: 5 }}>Giá (VNĐ)</label>
             <Form.Input name="price" placeholder="Giá dịch vụ" type="number" required />
