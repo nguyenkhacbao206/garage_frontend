@@ -1,6 +1,7 @@
 import axios1 from 'axios';
 import { ipRoot, ipAuth } from './ip';
 import { deleteCookie, getCookie, setCookie } from './cookie';
+import { notify } from '../components/Notification';
 
 const axios = axios1.create({
   // baseURL: ipRoot,
@@ -103,8 +104,6 @@ axios.interceptors.response.use(
             }
           );
 
-          console.log('Refresh token response:', res.data);
-
           // Xử lý nhiều format response có thể có
           const responseData = res.data?.data || res.data;
           const newAccessToken = responseData?.accessToken || res.data?.accessToken;
@@ -113,8 +112,6 @@ axios.interceptors.response.use(
             console.error('Response không có accessToken:', res.data);
             throw new Error('Không nhận được accessToken từ server');
           }
-
-          console.log('Refresh token thành công, lưu token mới');
 
           setCookie('accessToken', newAccessToken, 15);
 
@@ -159,15 +156,62 @@ axios.interceptors.response.use(
     }
 
     switch (status) {
-      case 400: console.log('Dữ liệu không hợp lệ (400)'); break;
-      case 403: console.log('Không có quyền truy cập (403)'); break;
-      case 404: console.log('Không tìm thấy (404)'); break;
-      case 405: console.log('Phương thức không hợp lệ (405)'); break;
-      case 409: console.log('Xung đột dữ liệu (409)'); break;
+      case 400:
+        notify({
+          title: "Lỗi 400",
+          type: "error",
+          description: "Dữ liệu không hợp lệ."
+        });
+        break;
+
+      case 403:
+        notify({
+          title: "Lỗi 403",
+          type: "error",
+          description: "Bạn không có quyền truy cập."
+        });
+        break;
+
+      case 404:
+        notify({
+          title: "Lỗi 404",
+          type: "error",
+          description: "Không tìm thấy tài nguyên yêu cầu."
+        });
+        break;
+
+      case 405:
+        notify({
+          title: "Lỗi 405",
+          type: "error",
+          description: "Phương thức không hợp lệ."
+        });
+        break;
+
+      case 409:
+        notify({
+          title: "Lỗi 409",
+          type: "warning",
+          description: "Xung đột dữ liệu."
+        });
+        break;
+
       case 500:
       case 502:
-      case 503: console.log('Máy chủ gặp sự cố, vui lòng thử lại sau.'); break;
-      default: console.log('Có lỗi không xác định. Vui lòng thử lại sau.');
+      case 503:
+        notify({
+          title: "Lỗi server",
+          type: "error",
+          description: "Máy chủ gặp sự cố, vui lòng thử lại sau."
+        });
+        break;
+
+      default:
+        notify({
+          title: "Lỗi không xác định",
+          type: "error",
+          description: "Vui lòng thử lại sau."
+        });
     }
 
     return Promise.resolve({
