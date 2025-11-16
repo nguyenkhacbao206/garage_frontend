@@ -49,12 +49,14 @@ export const notify = (prop: INotification) => {
   const root = createRoot(notifyDiv)
 
   const onClose = () => {
-    root.unmount()
-    notifyDiv.remove()
-    if (container && container.childElementCount === 0) {
-      container.remove()
-      container = null
-    }
+    setTimeout(() => {
+      root.unmount()
+      notifyDiv.remove()
+      if (container && container.childElementCount === 0) {
+        container.remove()
+        container = null
+      }
+    }, 0)
   }
 
   root.render(<Notification {...prop} onClose={onClose} />)
