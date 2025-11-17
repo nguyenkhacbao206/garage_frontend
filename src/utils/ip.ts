@@ -15,6 +15,6 @@ export {
   ipService,
   ipAuth,
   ipTechnician,
-  ipCar
+  ipCar,
   ipSupplier,
 }
