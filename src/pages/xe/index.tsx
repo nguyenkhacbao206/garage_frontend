@@ -1,7 +1,9 @@
-const Cars = () => {
+const Technician = () => {
   return (
-    <>Cars</>
+    <>Technician</>
   )
 }
 
-export default Cars
+export default Technician;
+
+//

@@ -18,11 +18,10 @@ const FormService = ({ valueInitial, method, setIsModal, isReload, setIsReload }
     
 
     const payload = {
-      name: data.name,
-      price: Number(data.price),
-      description: data.description || "",
-      serviceCode: data.serviceCode //
-    }
+       name: data.name,
+       price: Number(data.price),
+       description: data.description || "",
+     }
 
     let res
     if (method === "post") {
