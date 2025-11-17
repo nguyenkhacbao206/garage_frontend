@@ -7,7 +7,7 @@ const ipService = ipRoot + '/services'
 const ipAuth = ipRoot + '/auth'
 const ipTechnician = ipRoot + '/technicians'
 const ipCar = ipRoot + '/cars'
-
+const ipSupplier = ipRoot + "/suppliers"
 
 export {
   ipRoot,
@@ -16,4 +16,5 @@ export {
   ipAuth,
   ipTechnician,
   ipCar
+  ipSupplier,
 }
