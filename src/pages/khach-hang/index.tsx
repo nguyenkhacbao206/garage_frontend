@@ -219,8 +219,6 @@ const Customers = () => {
         </div>
 
       </BaseModal>
-
-
       <div
         style={{
           display: "flex",
