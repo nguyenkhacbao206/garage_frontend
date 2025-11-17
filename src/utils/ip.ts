@@ -5,10 +5,12 @@ const ipRoot = process.env.REACT_APP_IP_ROOT
 const ipCustomer = ipRoot + '/customers'
 const ipService = ipRoot + '/services'
 const ipAuth = ipRoot + '/auth'
+const ipSupplier = ipRoot + "/suppliers"
 
 export {
   ipRoot,
   ipCustomer,
   ipService,
   ipAuth,
+  ipSupplier,
 }
