@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getTechnicians, delTechnician, searchTechnicians, MTechnician } from "../../services/api/techniciansApi"
+import { getTechnicians, delTechnician, searchTechnicians } from "../../services/api/techniciansApi"
 import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import BaseModal from "../../components/baseModal"
@@ -29,17 +29,29 @@ const Technicians = () => {
 
     {
       title: "Thao tác",
-      render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button type="error" style={{ padding: 0, width: 23, height: 23 }} onClick={() => { setTechnicianIdDel(record.id); setIsModalDel(true) }}>
-            <AiOutlineDelete />
-          </Button>
-          <Button type="primary" style={{ padding: 0, width: 23, height: 23 }} onClick={() => openModal(record, "put")}>
-            <AiOutlineEdit />
-          </Button>
+      width: 80,
+      render: (value, record, index) => (
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+          <Button onClick={() => { setTechnicianIdDel(record?.id); setIsModalDel(true) }} type="error" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px",
+            marginRight: 2
+          }}><AiOutlineDelete /></Button>
+          <Button onClick={() => openModal(record, "put")} type="primary" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px"
+          }}><AiOutlineEdit /></Button>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   const openModal = (record?: MTechnician.IRecord, type?: "post" | "put") => {

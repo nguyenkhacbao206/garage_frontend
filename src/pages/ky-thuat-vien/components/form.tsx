@@ -3,7 +3,7 @@ import Form from "../../../components/FormBase"
 import Button from "../../../components/Button" 
 import { postTechnician, putTechnician } from "../../../services/api/techniciansApi"
 import { notify } from "../../../components/Notification"
-import { MTechnician } from "../../../services/api/techniciansApi"
+
 
 interface IFormTechnician {
   valueInitial?: MTechnician.IRecord
