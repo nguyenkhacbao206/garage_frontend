@@ -14,7 +14,7 @@ import FormCar from "./formlistcar"
 const ListCars = () => {
 
   const [dataCar, setDataCar] = useState<MCar.IResponse[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  // const [loading, setLoading] = useState<boolean>(true)
   const [isReload, setIsReload] = useState<boolean>(false)
   const [isModal, setIsModal] = useState<boolean>(false)
   const [isModalDel, setIsModalDel] = useState<boolean>(false)
@@ -76,7 +76,7 @@ const ListCars = () => {
   useEffect(() => {
     getCar().then(res => {
       setDataCar(res?.data ?? [])
-      setLoading(false)
+      // setLoading(false)
     })
   }, [isReload])
 
@@ -152,7 +152,7 @@ const ListCars = () => {
           <Button
             onClick={() => setModal(undefined, "post")}
             type="gradientPrimary"
-            style={{ padding: "9px 20px", marginRight: 10 }}
+            style={{ padding: "9px 20px", marginRight: 10, }}
           >
             + Thêm xe
           </Button>
@@ -181,7 +181,7 @@ const ListCars = () => {
         <TableBase
           columns={columns}
           dataSource={filteredData}
-          loading={loading}
+          // loading={loading}
         />
       </div>
     </>
