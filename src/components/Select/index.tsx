@@ -56,18 +56,19 @@ const Select = ({ name, options, multiple = false, placeholder = "Select..." }: 
   );
 
   // Close dropdown khi click ngoài
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // useEffect(() => {
+  //   const handleClickOutside = (e: MouseEvent) => {
+  //     if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+  //       setOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
+  // ref={containerRef}
 
   return (
-    <div className="antd-select" ref={containerRef}>
+    <div className="antd-select" >
       <div className={`select-input ${open ? "open" : ""}`} onClick={toggleOpen}>
         {multiple && selected.length > 0 ? (
           <div className="tags">
@@ -87,7 +88,7 @@ const Select = ({ name, options, multiple = false, placeholder = "Select..." }: 
         ) : selected[0] ? (
           <span>{selected[0].label}</span>
         ) : (
-          <span className="placeholder">{placeholder}</span>
+          <span className="placeholder"></span>
         )}
         <span className="arrow">{open ? <AiOutlineUp /> : <AiOutlineDown />}</span>
       </div>
