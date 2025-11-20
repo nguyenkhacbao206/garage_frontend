@@ -6,6 +6,7 @@ import Form, { Input } from "../../components/FormBase";
 import { getCustomers } from "../../services/api/customerApi";
 import { notify } from "../../components/Notification";
 import Select from "../../components/Select";
+import SelectSupplier from "../phu-tung/components/selectSupplier";
 
 
 const DashBoard = () => {
@@ -48,6 +49,7 @@ const DashBoard = () => {
         <h3>Single Select:</h3>
         <Form onFinish={onSub} initialValues={{ mm: ["apple", "banana"] }}>
           <Select name='mm' options={options} multiple />
+          <SelectSupplier name="ncc" />
           <Form.Input name="kkk"></Form.Input>
           <Button htmlType="submit">++</Button>
         </Form>
