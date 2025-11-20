@@ -24,6 +24,11 @@ const Parts = () => {
 
   const columns: Column<MPart.IRecord>[] = [
     {
+      title: "Mã phụ tùng",
+      dataIndex: "partCode",
+      width: 100,
+    },
+    {
       title: "Tên phụ tùng",
       dataIndex: "name",
       width: 150,
@@ -52,8 +57,11 @@ const Parts = () => {
     },
     {
       title: "Nhà cung cấp",
-      dataIndex: "supplierId",
+      dataIndex: "supplier",
       width: 200,
+      render: (value) => (
+        <div>{`${value.name}(${value.supplierCode})`}</div>
+      )
     },
     {
       title: "Mô tả",
@@ -61,7 +69,7 @@ const Parts = () => {
       width: 250,
       render: (text: string) => {
         const max = 60;
-        return text.length > max ? text.slice(0, max) + "..." : text;
+        return text?.length > max ? text.slice(0, max) + "..." : text;
       }
     },
     {
