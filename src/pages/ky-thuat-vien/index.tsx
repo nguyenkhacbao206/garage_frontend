@@ -4,19 +4,25 @@ import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import BaseModal from "../../components/baseModal"
 import FormTechnician from "./components/form"
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
+import DetailTechnician from "./components/detailTechnician"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 
 const Technicians = () => {
   const [dataTechnician, setDataTechnician] = useState<MTechnician.IRecord[]>([])
+  
   const [isModal, setIsModal] = useState(false)
-  const [isModalDel, setIsModalDel] = useState(false)
   const [technicianEdit, setTechnicianEdit] = useState<MTechnician.IRecord>()
   const [method, setMethod] = useState<"post" | "put">("post")
-  const [isReload, setIsReload] = useState(true)
+  
+  const [isModalDel, setIsModalDel] = useState(false)
   const [technicianIdDel, setTechnicianIdDel] = useState<string>()
+  
+  const [isModalDetail, setIsModalDetail] = useState(false)
+  const [dataDetail, setDataDetail] = useState<MTechnician.IRecord>()
 
+  const [isReload, setIsReload] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
 
@@ -29,18 +35,22 @@ const Technicians = () => {
 
     {
       title: "Thao tác",
-      width: 80,
+      width: 100,
       render: (value, record, index) => (
-        <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={() => { setDataDetail(record); setIsModalDetail(true) }} type="viewDetail" style={{ padding: 0, width: 23, height: 23 }}>
+            <AiOutlineEye />
+          </Button>
+
           <Button onClick={() => { setTechnicianIdDel(record?.id); setIsModalDel(true) }} type="error" style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             padding: "0",
             height: "23px",
-            width: "23px",
-            marginRight: 2
+            width: "23px"
           }}><AiOutlineDelete /></Button>
+
           <Button onClick={() => openModal(record, "put")} type="primary" style={{
             display: "flex",
             justifyContent: "center",
@@ -107,6 +117,10 @@ const Technicians = () => {
     <>
       <BaseModal isOpen={isModal} closeModal={() => setIsModal(false)}>
         <FormTechnician valueInitial={technicianEdit} method={method} setIsModal={setIsModal} isReload={isReload} setIsReload={setIsReload} />
+      </BaseModal>
+
+      <BaseModal isOpen={isModalDetail} closeModal={() => setIsModalDetail(false)}>
+        <DetailTechnician data={dataDetail} />
       </BaseModal>
 
       <BaseModal isOpen={isModalDel} closeModal={() => setIsModalDel(false)}>

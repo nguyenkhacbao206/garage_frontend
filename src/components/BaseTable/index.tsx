@@ -19,6 +19,7 @@ export interface ITableBase<T = any> {
   pageSize?: number,
   loading?: boolean,
   width?: number
+  emptyText?: string
 }
 
 
@@ -28,6 +29,7 @@ const TableBase = <T,>({
   rowkey = "id",
   pageSize = 7,
   loading = false,
+  emptyText = "Không có dữ liệu",
 }: ITableBase<T>) => {
   const [pageNumber, setPagenumber] = useState<number>(1)
   const totalPage = Math.ceil(dataSource?.length / pageSize);

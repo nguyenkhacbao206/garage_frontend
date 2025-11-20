@@ -1,5 +1,5 @@
 
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch } from "react-icons/ai"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiOutlineEye } from "react-icons/ai"
 import Button from "../../../components/Button"
 import { Input } from "../../../components/FormBase"
 import TableBase, { Column } from "../../../components/BaseTable"
@@ -8,6 +8,7 @@ import BaseModal from "../../../components/baseModal"
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import { notify } from "../../../components/Notification"
 import { ColorStyle } from "../../../styles/colors"
+import DetailCar from "./detailCar"
 
 import { deleteCar, getCar } from "../../../services/api/carApi"
 import FormCar from "./formlistcar"
@@ -15,7 +16,7 @@ import FormCar from "./formlistcar"
 const ListCars = () => {
 
   const [dataCar, setDataCar] = useState<MCar.IResponse[]>([])
-  // const [loading, setLoading] = useState<boolean>(true)
+  const [isModalDetail, setIsModalDetail] = useState<boolean>(false)
   const [isReload, setIsReload] = useState<boolean>(false)
   const [isModal, setIsModal] = useState<boolean>(false)
   const [isModalDel, setIsModalDel] = useState<boolean>(false)
@@ -55,6 +56,9 @@ const ListCars = () => {
       width: 80,
       render: (_, record) => (
         <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={() => { setDataCarId(record); setIsModalDetail(true) }} type="viewDetail" style={{ padding: 0, width: 23, height: 23 }}>
+            <AiOutlineEye />
+          </Button>
           <Button
             onClick={() => { setIdCarDel(record.id); setIsModalDel(true); }}
             type="error"
@@ -140,6 +144,9 @@ const ListCars = () => {
             <Button type="error" onClick={() => delModal(idCarDel)}>Confirm</Button>
           </div>
         </div>
+      </BaseModal>
+      <BaseModal isOpen={isModalDetail} closeModal={() => setIsModalDetail(false)}>
+        <DetailCar data={dataCarId} />
       </BaseModal>
 
       {/* Table */}
