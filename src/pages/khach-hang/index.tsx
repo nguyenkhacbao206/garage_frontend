@@ -10,6 +10,7 @@ import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 import { ColorStyle } from "../../styles/colors"
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import ConfirmDelete from "../../components/confirmDelete"
 
 
 const Customers = () => {
@@ -203,21 +204,10 @@ const Customers = () => {
         isOpen={isModalDel}
         closeModal={() => setIsModalDel(false)}
       >
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: 'column'
-        }}>
-          <IoIosCloseCircleOutline style={{ fontSize: 70, color: ColorStyle.Error }} />
-          <h5>Are you sure ?</h5>
-          <p>are you sure you would like to do this</p>
-          <div>
-            <Button style={{ marginRight: 10 }} onClick={() => setIsModalDel(false)}>Cancel</Button>
-            <Button onClick={() => delModal(idKHdel)} type="error">Confirm</Button>
-          </div>
-        </div>
-
+        <ConfirmDelete
+          onCancel={() => setIsModalDel(false)}
+          onConfirm={() => delModal(idKHdel)}
+        />
       </BaseModal>
       <div
         style={{

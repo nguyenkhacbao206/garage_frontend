@@ -6,7 +6,7 @@ import Button from "../Button"
 import { FourSquare } from "react-loading-indicators"
 
 export type Column<T = any> = {
-  title: string,
+  title: React.ReactNode,
   dataIndex?: keyof T,
   width?: number,
   render?: (value: any, record: T, index: number) => React.ReactNode
