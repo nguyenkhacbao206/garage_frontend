@@ -1,28 +1,6 @@
 import axios from "../../utils/axios"
 import { ipTechnician } from "../../utils/ip" 
 
-// Định nghĩa kiểu dữ liệu
-export declare namespace MTechnician {
-  interface IRecord {
-    id: string
-    name: string
-    techCode: string
-    phone: string
-    baseSalary: number 
-    position?: string
-    userId?: string
-    active?: boolean
-  }
-
-  interface IRequest {
-    name: string
-    phone: string
-    baseSalary: number
-    position?: string
-    userId?: string
-  }
-}
-
 // Interface 
 interface ApiResponse<T = any> {
   success?: boolean

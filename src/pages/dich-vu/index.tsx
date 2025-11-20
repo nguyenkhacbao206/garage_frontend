@@ -41,17 +41,29 @@ const Services = () => {
     { title: "Mô tả", dataIndex: "description" },
     {
       title: "Thao tác",
-      render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button type="error" style={{ padding: 0, width: 23, height: 23 }} onClick={() => { setServiceIdDel(record.id); setIsModalDel(true) }}>
-            <AiOutlineDelete />
-          </Button>
-          <Button type="primary" style={{ padding: 0, width: 23, height: 23 }} onClick={() => openModal(record, "put")}>
-            <AiOutlineEdit />
-          </Button>
+      width: 80,
+      render: (value, record, index) => (
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+          <Button onClick={() => { setServiceIdDel(record?.id); setIsModalDel(true) }} type="error" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px",
+            marginRight: 2
+          }}><AiOutlineDelete /></Button>
+          <Button onClick={() => openModal(record, "put")} type="primary" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0",
+            height: "23px",
+            width: "23px"
+          }}><AiOutlineEdit /></Button>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   const openModal = (record?: MService.IRecord, type?: "post" | "put") => {
