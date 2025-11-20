@@ -1,11 +1,12 @@
 declare module MPart {
   interface IRecord {
     id: string,
+    partCode: string,
     name: string,
-    unit: string,
     price: number,
     stock: number,
     description: string,
-    supplierId: string
+    supplierId: string,
+    supplier: MSupplier.IRecord
   }
 }

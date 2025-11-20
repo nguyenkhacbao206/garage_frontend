@@ -58,8 +58,14 @@ const DetailPart = ({ data }: IDetailPart) => {
       </div>
 
       <div style={rowStyle}>
-        <span style={labelStyle}>Nhà cung cấp ID:</span>
-        <span style={valueStyle}>{data?.supplierId || "-"}</span>
+        <span style={labelStyle}>Nhà cung cấp:</span>
+        <span style={valueStyle}>
+          <div>- {data?.supplier?.name}</div>
+          <div>- {data?.supplier?.address}</div>
+          <div>- {data?.supplier?.email}</div>
+          <div>- {data?.supplier?.phone}</div>
+          <div>- {data?.supplier?.description}</div>
+        </span>
       </div>
 
       <div style={{ ...rowStyle, alignItems: "flex-start" }}>
