@@ -77,7 +77,7 @@ const Suppliers = () => {
   const delModal = async (id: string) => {
     const res = await deleteSupplier(id)
     if (!res.status) {
-      notify({ title: "Delete", type: "error", description: "Thông tin nhà cung cấp đã được xóa thành công" })
+      notify({ title: "Delete", type: "success", description: "Thông tin nhà cung cấp đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {

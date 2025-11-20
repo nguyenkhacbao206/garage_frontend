@@ -1,3 +1,4 @@
+
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch } from "react-icons/ai"
 import Button from "../../../components/Button"
 import { Input } from "../../../components/FormBase"
@@ -84,7 +85,7 @@ const ListCars = () => {
   const delModal = async (id: string) => {
     const res = await deleteCar(id)
     if (res.success) {
-      notify({ title: "Delete", type: "error", description: "Đã xóa xe thành công" })
+      notify({ title: "Delete", type: "success", description: "Đã xóa xe thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {

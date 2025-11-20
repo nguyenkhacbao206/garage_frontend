@@ -153,7 +153,7 @@ const Customers = () => {
   const delModal = async (id: any) => {
     const res = await delCustomer(id)
     if (!res.status) {
-      notify({ title: "Delete", type: "error", description: "Thông tin khách hàng đã được xóa thành công" })
+      notify({ title: "Delete", type:"success", description: "Thông tin khách hàng đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {

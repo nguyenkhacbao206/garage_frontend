@@ -26,7 +26,7 @@ const TableBase = <T,>({
   columns,
   dataSource,
   rowkey = "id",
-  pageSize = 10,
+  pageSize = 7,
   loading = false,
 }: ITableBase<T>) => {
   const [pageNumber, setPagenumber] = useState<number>(1)
