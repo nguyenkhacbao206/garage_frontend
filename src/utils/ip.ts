@@ -3,11 +3,18 @@ const ipRoot = process.env.REACT_APP_IP_ROOT
 
 // ip khác
 const ipCustomer = ipRoot + '/customers'
-// Dịch vụ
 const ipService = ipRoot + '/services'
+const ipAuth = ipRoot + '/auth'
+const ipTechnician = ipRoot + '/technicians'
+const ipCar = ipRoot + '/cars'
+const ipSupplier = ipRoot + "/suppliers"
 
 export {
   ipRoot,
   ipCustomer,
-  ipService
+  ipService,
+  ipAuth,
+  ipTechnician,
+  ipCar
+  ipSupplier,
 }

@@ -1,49 +1,37 @@
 import { useEffect, useState } from "react"
-import { getServices, delService, searchServices } from "../../services/api/servicesApi"
+import { getTechnicians, delTechnician, searchTechnicians, MTechnician } from "../../services/api/techniciansApi"
 import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import BaseModal from "../../components/baseModal"
-import FormService from "./components/form"
+import FormTechnician from "./components/form"
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 
-const convertBrokenObjectToArray = (res: any): MService.IRecord[] => {
-  if (!res) return []
-  
-  // Nếu res.data tồn tại trả về mảng rỗng
-  if (res.data) return []
-
-  // Nếu res là đối tượng { "0": ..., "1": ... }
-  const dataArray = Object.keys(res)
-    .filter(key => !isNaN(Number(key)))
-    .map(key => (res as any)[key]);
-
-  return dataArray
-}
-
-const Services = () => {
-  const [dataService, setDataService] = useState<MService.IRecord[]>([])
+const Technicians = () => {
+  const [dataTechnician, setDataTechnician] = useState<MTechnician.IRecord[]>([])
   const [isModal, setIsModal] = useState(false)
   const [isModalDel, setIsModalDel] = useState(false)
-  const [serviceEdit, setServiceEdit] = useState<MService.IRecord>()
+  const [technicianEdit, setTechnicianEdit] = useState<MTechnician.IRecord>()
   const [method, setMethod] = useState<"post" | "put">("post")
   const [isReload, setIsReload] = useState(true)
-  const [serviceIdDel, setServiceIdDel] = useState<string>()
+  const [technicianIdDel, setTechnicianIdDel] = useState<string>()
 
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
 
-  const Columns: Column<MService.IRecord>[] = [
-    { title: "Mã dịch vụ", dataIndex: "serviceCode" },
-    { title: "Tên dịch vụ", dataIndex: "name" },
-    { title: "Giá (VNĐ)", dataIndex: "price", render: (value) => <div>{Number(value)?.toLocaleString()}</div> },
-    { title: "Mô tả", dataIndex: "description" },
+  const Columns: Column<MTechnician.IRecord>[] = [
+    { title: "Mã KTV", dataIndex: "techCode" },
+    { title: "Tên kỹ thuật viên", dataIndex: "name" },
+    { title: "Số điện thoại", dataIndex: "phone" },
+    { title: "Lương cơ bản (VNĐ)", dataIndex: "baseSalary", render: (value) => <div>{Number(value)?.toLocaleString()}</div> },
+    { title: "Chức vụ", dataIndex: "position" },
+
     {
       title: "Thao tác",
       render: (_, record) => (
         <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button type="error" style={{ padding: 0, width: 23, height: 23 }} onClick={() => { setServiceIdDel(record.id); setIsModalDel(true) }}>
+          <Button type="error" style={{ padding: 0, width: 23, height: 23 }} onClick={() => { setTechnicianIdDel(record.id); setIsModalDel(true) }}>
             <AiOutlineDelete />
           </Button>
           <Button type="primary" style={{ padding: 0, width: 23, height: 23 }} onClick={() => openModal(record, "put")}>
@@ -54,8 +42,8 @@ const Services = () => {
     }
   ]
 
-  const openModal = (record?: MService.IRecord, type?: "post" | "put") => {
-    setServiceEdit(record ?? ({} as MService.IRecord))
+  const openModal = (record?: MTechnician.IRecord, type?: "post" | "put") => {
+    setTechnicianEdit(record ?? ({} as MTechnician.IRecord))
     setMethod(type ?? "post")
     setIsModal(true)
   }
@@ -63,9 +51,9 @@ const Services = () => {
   const handleDelete = async (id?: string) => {
     if (!id) return
     
-    const res = await delService(id)
+    const res = await delTechnician(id)
     if (res?.success) {
-      notify({ title: "Delete", type: "error", description: "Dịch vụ đã được xóa thành công" })
+      notify({ title: "Delete", type: "error", description: "Kỹ thuật viên đã được xóa." })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {
@@ -73,7 +61,6 @@ const Services = () => {
     }
   }
 
-  // Debounce search
   useEffect(() => {
     const timerId = setTimeout(() => setDebouncedSearchQuery(searchQuery), 500)
     return () => clearTimeout(timerId)
@@ -84,17 +71,21 @@ const Services = () => {
       try {
         let res
         if (debouncedSearchQuery) {
-          res = await searchServices(debouncedSearchQuery)
+          res = await searchTechnicians(debouncedSearchQuery)
         } else {
-          res = await getServices()
+          res = await getTechnicians()
+        }
+        
+        const payload = res.data
+        if (Array.isArray(payload)) {
+          setDataTechnician(payload)
+        } else {
+          setDataTechnician([])
         }
 
-        const workingArray = convertBrokenObjectToArray(res)
-        setDataService(workingArray)
-
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu dịch vụ:", error)
-        setDataService([])
+        console.error("Lỗi khi tải dữ liệu kỹ thuật viên:", error)
+        setDataTechnician([])
       }
     }
     fetchData()
@@ -103,28 +94,28 @@ const Services = () => {
   return (
     <>
       <BaseModal isOpen={isModal} closeModal={() => setIsModal(false)}>
-        <FormService valueInitial={serviceEdit} method={method} setIsModal={setIsModal} isReload={isReload} setIsReload={setIsReload} />
+        <FormTechnician valueInitial={technicianEdit} method={method} setIsModal={setIsModal} isReload={isReload} setIsReload={setIsReload} />
       </BaseModal>
 
       <BaseModal isOpen={isModalDel} closeModal={() => setIsModalDel(false)}>
         <div style={{ textAlign: "center" }}>
           <AiTwotoneCloseCircle size={40} style={{ color: "red" }} />
           <h5>Are you sure?</h5>
-          <p>Bạn có chắc chắn muốn xóa dịch vụ này?</p>
+          <p>Bạn có chắc chắn muốn xóa kỹ thuật viên này?</p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
             <Button onClick={() => setIsModalDel(false)}>Cancel</Button>
-            <Button type="error" onClick={() => handleDelete(serviceIdDel)}>Confirm</Button>
+            <Button type="error" onClick={() => handleDelete(technicianIdDel)}>Confirm</Button>
           </div>
         </div>
       </BaseModal>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "20px 10px" }}>
         <div>
-          <h1 style={{ margin: 0 }}>Danh sách dịch vụ</h1>
-          <div>Danh sách và thông tin dịch vụ</div>
+          <h1 style={{ margin: 0 }}>Danh sách kỹ thuật viên</h1>
+          <div>Quản lý thông tin kỹ thuật viên</div>
         </div>
         <Button onClick={() => openModal(undefined, "post")} style={{ padding: "10px 20px" }} type="gradientPrimary">
-          + Thêm dịch vụ
+          + Thêm kỹ thuật viên
         </Button>
       </div>
 
@@ -133,15 +124,15 @@ const Services = () => {
         <Input
           name="search"
           style={{ width: 230, margin: "10px 10px", marginRight: 25, borderRadius: 7 }}
-          placeholder="Tìm theo mã, tên, ..."
+          placeholder="Tìm theo mã, tên, SĐT..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
 
-      <TableBase columns={Columns} dataSource={dataService} />
+      <TableBase columns={Columns} dataSource={dataTechnician} />
     </>
   )
 }
 
-export default Services
+export default Technicians

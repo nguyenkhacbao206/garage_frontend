@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 import "./index.scss"
 
-const FormContext = createContext<any>(null);
+export const FormContext = createContext<any>(null);
 
-export interface IFormProps {
-  initialValues?: Record<string, any>;
-  onFinish?: (values: Record<string, any>) => void;
+export interface IFormProps<T> {
+  initialValues?: T;
+  onFinish?: (values: T) => void;
   className?: string;
   children?: React.ReactNode;
 }
@@ -17,12 +17,14 @@ export interface IFormInputProps
 }
 
 // ===== Form =====
-function Form(props: IFormProps) {
+function Form<T extends Record<string, any> = Record<string, any>>(
+  props: IFormProps<T>
+) {
   const { initialValues = {}, onFinish, className = "", children } = props;
-  const [values, setValues] = useState<Record<string, any>>(initialValues);
+  const [values, setValues] = useState<T>(initialValues as T);
 
   const setFieldValue = (name: string, value: any) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
+    setValues((prev) => ({ ...prev, [name]: value } as T));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
