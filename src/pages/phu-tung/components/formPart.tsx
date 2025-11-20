@@ -50,10 +50,6 @@ const FormPart = ({ valueInitial, method, setIsModal, isReload, setIsReload }: I
               <label className="form-label required" style={{ margin: 5 }}>Tên phụ tùng</label>
               <Form.Input name="name" placeholder="Tên phụ tùng" required />
             </Col>
-            <Col xs={12} sm={12}>
-              <label className="form-label required" style={{ margin: 5 }}>Đơn vị</label>
-              <Form.Input name="unit" placeholder="Đơn vị" required />
-            </Col>
             <Col xs={12} sm={6}>
               <label className="form-label required" style={{ margin: 5 }}>Giá bán</label>
               <Form.Input type="number" name="price" placeholder="Giá bán" required />
