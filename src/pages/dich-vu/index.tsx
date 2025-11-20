@@ -4,33 +4,34 @@ import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import BaseModal from "../../components/baseModal"
 import FormService from "./components/form"
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
+import DetailService from "./components/detailService"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 
 const convertBrokenObjectToArray = (res: any): MService.IRecord[] => {
   if (!res) return []
-  
-  // Nếu res.data tồn tại trả về mảng rỗng
   if (res.data) return []
-
-  // Nếu res là đối tượng { "0": ..., "1": ... }
   const dataArray = Object.keys(res)
     .filter(key => !isNaN(Number(key)))
     .map(key => (res as any)[key]);
-
   return dataArray
 }
 
 const Services = () => {
   const [dataService, setDataService] = useState<MService.IRecord[]>([])
+  
   const [isModal, setIsModal] = useState(false)
-  const [isModalDel, setIsModalDel] = useState(false)
   const [serviceEdit, setServiceEdit] = useState<MService.IRecord>()
   const [method, setMethod] = useState<"post" | "put">("post")
-  const [isReload, setIsReload] = useState(true)
+  
+  const [isModalDel, setIsModalDel] = useState(false)
   const [serviceIdDel, setServiceIdDel] = useState<string>()
+  
+  const [isModalDetail, setIsModalDetail] = useState(false)
+  const [dataDetail, setDataDetail] = useState<MService.IRecord>()
 
+  const [isReload, setIsReload] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
 
@@ -41,25 +42,21 @@ const Services = () => {
     { title: "Mô tả", dataIndex: "description" },
     {
       title: "Thao tác",
-      width: 80,
+      width: 100,
       render: (value, record, index) => (
-        <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={() => { setDataDetail(record); setIsModalDetail(true) }} type="viewDetail" style={{ padding: 0, width: 23, height: 23 }}>
+            <AiOutlineEye />
+          </Button>
+
           <Button onClick={() => { setServiceIdDel(record?.id); setIsModalDel(true) }} type="error" style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "0",
-            height: "23px",
-            width: "23px",
-            marginRight: 2
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "0", height: "23px", width: "23px"
           }}><AiOutlineDelete /></Button>
+
           <Button onClick={() => openModal(record, "put")} type="primary" style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "0",
-            height: "23px",
-            width: "23px"
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "0", height: "23px", width: "23px"
           }}><AiOutlineEdit /></Button>
         </div>
       ),
@@ -85,7 +82,6 @@ const Services = () => {
     }
   }
 
-  // Debounce search
   useEffect(() => {
     const timerId = setTimeout(() => setDebouncedSearchQuery(searchQuery), 500)
     return () => clearTimeout(timerId)
@@ -116,6 +112,10 @@ const Services = () => {
     <>
       <BaseModal isOpen={isModal} closeModal={() => setIsModal(false)}>
         <FormService valueInitial={serviceEdit} method={method} setIsModal={setIsModal} isReload={isReload} setIsReload={setIsReload} />
+      </BaseModal>
+
+      <BaseModal isOpen={isModalDetail} closeModal={() => setIsModalDetail(false)}>
+        <DetailService data={dataDetail} />
       </BaseModal>
 
       <BaseModal isOpen={isModalDel} closeModal={() => setIsModalDel(false)}>
