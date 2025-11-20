@@ -65,7 +65,7 @@ const Technicians = () => {
     
     const res = await delTechnician(id)
     if (res?.success) {
-      notify({ title: "Delete", type: "error", description: "Kỹ thuật viên đã được xóa." })
+      notify({ title: "Delete", type: "success", description: "Kỹ thuật viên đã được xóa." })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {

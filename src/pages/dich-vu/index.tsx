@@ -77,7 +77,7 @@ const Services = () => {
     
     const res = await delService(id)
     if (res?.success) {
-      notify({ title: "Delete", type: "error", description: "Dịch vụ đã được xóa thành công" })
+      notify({ title: "Delete", type: "success", description: "Dịch vụ đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {
