@@ -24,7 +24,6 @@ const DetailCar = ({ data }: IDetailCar) => {
     fontSize: "15px",
   };
 
-  // Hàm helper để hiển thị trạng thái
   const renderStatus = (isActive: boolean) => {
     return isActive ? (
       <span style={{ color: "#52c41a", fontWeight: 600 }}>Đang hoạt động</span>
