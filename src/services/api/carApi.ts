@@ -45,6 +45,39 @@ const getCar = async (): Promise<ApiResponse<MCar.IResponse[]>> => {
   return res as ApiResponse<MCar.IResponse[]>;
 }
 
+const getCarSorted = async (asc: boolean = true): Promise<ApiResponse<MCar.IResponse[]>> => {
+  const res: any = await axios.get(`${ipCar}/sorted?asc=${asc}`);
+
+  if (res.success && res.data) {
+    return res as ApiResponse<MCar.IResponse[]>;
+  }
+
+  if (res.success) {
+    const { success, ...dataObjects } = res;
+    const dataArray = Object.values(dataObjects);
+
+    return {
+      data: dataArray as MCar.IResponse[],
+      success: true
+    };
+  }
+
+  return res as ApiResponse<MCar.IResponse[]>;
+};
+const searchCar = async (keyword: string): Promise<ApiResponse<MCar.IResponse[]>> => {
+  const res: any = await axios.get(`${ipCar}/search?keyword=${keyword}`);
+  
+  if (res.success && res.data) {
+    return res as ApiResponse<MCar.IResponse[]>;
+  }
+  if (res.success) {
+    const { success, ...dataObjects } = res;
+    const dataArray = Object.values(dataObjects);
+    return { data: dataArray as MCar.IResponse[], success: true };
+  }
+  return res as ApiResponse<MCar.IResponse[]>;
+}
+
 const postCar = async (data: MCar.IRequest): Promise<ApiResponse<MCar.IResponse>> => {
   const res = await axios.post(ipCar, data);
   return res as ApiResponse<MCar.IResponse>;
@@ -65,5 +98,7 @@ export {
   postCar,
   putCar,
   deleteCar,
+  getCarSorted,
+  searchCar,
   // getCustomers
 }
