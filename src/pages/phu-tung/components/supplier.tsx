@@ -3,7 +3,7 @@ import Button from "../../../components/Button"
 import { Input } from "../../../components/FormBase"
 import TableBase, { Column } from "../../../components/BaseTable"
 import { useEffect, useState } from "react"
-import { deleteSupplier, getSupplier } from "../../../services/api/supplierApi"
+import { deleteSupplier, getSupplier, getSupplierSearch } from "../../../services/api/supplierApi"
 import BaseModal from "../../../components/baseModal"
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import { notify } from "../../../components/Notification"
@@ -22,6 +22,7 @@ const Suppliers = () => {
   const [method, setMethod] = useState<"post" | "put">("post")
   const [dataSupplierId, setDataSupplierId] = useState<MSupplier.IRecord>()
   const [isModalDetail, setIsModalDetail] = useState<boolean>(false)
+  const [querySearch, setQuerySearch] = useState<any>()
 
 
   const columns: Column<MSupplier.IRecord>[] = [
@@ -75,9 +76,16 @@ const Suppliers = () => {
   ]
 
   useEffect(() => {
-    getSupplier().then(res => setDataSupplier(res?.data ? res.data : []))
-    setLoading(false)
-  }, [isReload])
+    if (querySearch) {
+      getSupplierSearch(querySearch)
+        .then(res => setDataSupplier(res?.data ? res.data : []))
+        .finally(() => setLoading(false))
+    } else {
+      getSupplier()
+        .then(res => setDataSupplier(res?.data ? res.data : []))
+        .finally(() => setLoading(false))
+    }
+  }, [isReload, querySearch])
 
   const delModal = async (id: string) => {
     const res = await deleteSupplier(id)
@@ -147,9 +155,10 @@ const Suppliers = () => {
                   width: 230,
                   margin: "10px 10px",
                   marginRight: "25px ",
-                  borderRadius: 7
+                  borderRadius: 7,
                 }}
                 placeholder="Tìm theo mã, tên sản phẩm ..."
+                onChange={e => setQuerySearch(e.target.value)}
               />
             </div>
             <TableBase

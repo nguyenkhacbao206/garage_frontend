@@ -60,7 +60,7 @@ const Parts = () => {
       dataIndex: "supplier",
       width: 200,
       render: (value) => (
-        <div>{`${value.name}(${value.supplierCode})`}</div>
+        <div>{`${value?.name}(${value?.supplierCode})`}</div>
       )
     },
     {

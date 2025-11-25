@@ -75,7 +75,13 @@ const TableBase = <T,>({
             </tr>
           </thead>
           <tbody>
-            {loading ? <tr><td colSpan={columns?.length} style={{ textAlign: "center", paddingTop: "30px" }}><FourSquare color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} size="small" /><p>Đang tải dữ liệu ...</p></td></tr>
+            {loading ? <tr><td colSpan={columns?.length} style={{ paddingTop: "30px" }}>
+              {/* <FourSquare color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} size="small" /> */}
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <div className="loader"></div>
+                <p style={{ fontSize: 16, fontWeight: 500 }}>Đang tải dữ liệu ...</p>
+              </div>
+            </td></tr>
               : (dataSource && dataSource.length !== 0) ? dataTable?.map((record, index) => {
                 const key = getRowKey(record, index);
                 return (

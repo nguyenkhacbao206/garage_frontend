@@ -60,6 +60,23 @@ const HeaderManage = (
           >
             {!isMobile ? <AiOutlineMenu /> : isSider ? <AiOutlineMenuFold size={23} /> : <AiOutlineMenuUnfold size={23} />}
           </div>
+          {/* <div
+            style={{
+              display: "inline-block",
+              padding: "10px 16px",
+              width: 500,
+              textAlign: "center",
+              fontWeight: 600,
+              fontFamily: "system-ui",
+              borderRadius: "5px",
+              color: "#fff",
+              textShadow: "0 1px 0 rgba(0,0,0,.15)",
+              backgroundImage:
+                "linear-gradient(90deg,#ff0000,#ff7a00,#ffeb00,#00b140,#0077ff,#6a0dad,#d4008f)"
+            }}
+          >
+            Khấc Bảo bị bisexual
+          </div> */}
           <div>
             <Button onClick={() => logout()}>Đăng xuất</Button>
           </div>
