@@ -5,7 +5,7 @@ import Suppliers from "./components/supplier"
 import Imported from "./components/imported "
 
 const PartCars = () => {
-  const [segmented, setSegmented] = useState<1 | 2 | 3>(2)
+  const [segmented, setSegmented] = useState<1 | 2 | 3>(1)
 
   const styleOp = {
     padding: "3px 14px",

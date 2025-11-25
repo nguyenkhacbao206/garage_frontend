@@ -18,7 +18,8 @@ const FormPart = ({ valueInitial, method, setIsModal, isReload, setIsReload }: I
 
   const onSubmit = async (data: MPart.IRecord) => {
     if (method === "post") {
-      const res = await postPart(data)
+      const payData = { ...data, stock: 0 }
+      const res = await postPart(payData)
       if (res.success) {
         notify({ title: "Success", type: "success", description: "Đã thêm nhà cung cấp mới" })
         setIsReload?.(!isReload)
@@ -56,7 +57,7 @@ const FormPart = ({ valueInitial, method, setIsModal, isReload, setIsReload }: I
             </Col>
             <Col xs={12} sm={6}>
               <label className="form-label required" style={{ margin: 5 }}>Tồn kho</label>
-              <Form.Input type="number" name="stock" placeholder="Tồn kho" required />
+              <Form.Input type="number" name="stock" placeholder="0" required disabled={method === 'post' ? true : false} />
             </Col>
             <Col xs={12} sm={12}>
               <label className="form-label " style={{ margin: 5 }}>Nhà cung cấp</label>

@@ -7,6 +7,8 @@ declare module MPart {
     stock: number,
     description: string,
     supplierId: string,
-    supplier: MSupplier.IRecord
+    supplier: MSupplier.IRecord,
+    createdAt: string,
+    updatedAt: string
   }
 }

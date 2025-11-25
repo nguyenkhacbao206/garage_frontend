@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { delCustomer, getCustomers } from "../../services/api/customerApi"
+import { delCustomer, getCustomers, getCustomerSearch } from "../../services/api/customerApi"
 import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import Tag from "../../components/Tag"
@@ -14,18 +14,17 @@ import ConfirmDelete from "../../components/confirmDelete"
 
 const Customers = () => {
   const [dataCustomer, setDataCustomer] = useState<MCustomer.IRecord[]>([])
-  
   const [isModal, setIsModal] = useState<boolean>(false)
   const [isModalCar, setIsModalCar] = useState<boolean>(false)
   const [isModalDel, setIsModalDel] = useState<boolean>(false)
   const [isModalDetail, setIsModalDetail] = useState<boolean>(false)
-  
   const [dataCustomerId, setDataCustomerId] = useState<MCustomer.IRecord>()
   const [dataCar, setDataCar] = useState<any[]>([])
   const [method, setMethod] = useState<"post" | "put">("post")
   const [isReload, setIsReload] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(true)
   const [idKHdel, setIdKHdel] = useState<string>()
+  const [querySearch, setQuerySearch] = useState<any>()
 
   const Columns: Column<MCustomer.IRecord>[] = [
     {
@@ -94,32 +93,49 @@ const Customers = () => {
   ]
 
   const columnsCar: Column<any>[] = [
-    { title: "Biển số", dataIndex: "plate" },
-    { title: "Kiểu xe", dataIndex: "model" },
-    { title: "Hãng xe", dataIndex: "manufacturer" },
-    { title: "Mô tả", dataIndex: "description" },
     {
-      title: "Thao tác",
-      width: 80,
-      render: (value, record) => (
-        <div style={{ textAlign: "center", display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button onClick={() => { setIdKHdel(record?.id); setIsModalDel(true) }} type="error" style={{
-            display: "flex", justifyContent: "center", alignItems: "center",
-            padding: "0", height: "23px", width: "23px"
-          }}><AiOutlineDelete /></Button>
-          <Button onClick={() => setModal(record, "put")} type="primary" style={{
-            display: "flex", justifyContent: "center", alignItems: "center",
-            padding: "0", height: "23px", width: "23px"
-          }}><AiOutlineEdit /></Button>
-        </div>
-      ),
+      title: "Biển số",
+      dataIndex: "plate"
     },
+    {
+      title: "Kiểu xe",
+      dataIndex: "model"
+    },
+    {
+      title: "Hãng xe",
+      dataIndex: "manufacturer"
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "description",
+      width: 180,
+      render: (text: string) => {
+        const max = 60;
+        return text?.length > max ? text.slice(0, max) + "..." : text;
+      }
+    },
+    // {
+    //   title: "Thao tác",
+    //   width: 80,
+    //   render: (value, record) => (
+    //     <div style={{ textAlign: "center", display: "flex", justifyContent: "center", gap: 5 }}>
+    //       <Button onClick={() => { setIdKHdel(record?.id); setIsModalDel(true) }} type="error" style={{
+    //         display: "flex", justifyContent: "center", alignItems: "center",
+    //         padding: "0", height: "23px", width: "23px"
+    //       }}><AiOutlineDelete /></Button>
+    //       <Button onClick={() => setModal(record, "put")} type="primary" style={{
+    //         display: "flex", justifyContent: "center", alignItems: "center",
+    //         padding: "0", height: "23px", width: "23px"
+    //       }}><AiOutlineEdit /></Button>
+    //     </div>
+    //   ),
+    // },
   ]
 
   const delModal = async (id: any) => {
     const res = await delCustomer(id)
     if (!res.status) {
-      notify({ title: "Delete", type:"success", description: "Thông tin khách hàng đã được xóa thành công" })
+      notify({ title: "Delete", type: "success", description: "Thông tin khách hàng đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {
@@ -128,7 +144,7 @@ const Customers = () => {
       setIsReload(!isReload)
     }
   }
-  
+
   const setModal = (data?: MCustomer.IRecord, method?: "post" | "put") => {
     setDataCustomerId(data)
     setMethod(method || "post")
@@ -136,9 +152,19 @@ const Customers = () => {
   }
 
   useEffect(() => {
-    getCustomers().then(res => setDataCustomer(res?.data))
-    setLoading(false)
-  }, [isReload])
+    if (querySearch) {
+      setLoading(true)
+      getCustomerSearch(querySearch)
+        .then(res => setDataCustomer(res?.data))
+        .finally(() => setLoading(false))
+    } else {
+      setLoading(true)
+      getCustomers()
+        .then(res => setDataCustomer(res?.data))
+        .finally(() => setLoading(false))
+    }
+
+  }, [isReload, querySearch])
 
   return (
     <>
@@ -177,6 +203,7 @@ const Customers = () => {
           name="search"
           style={{ width: 230, margin: "10px 10px", marginRight: "25px ", borderRadius: 7 }}
           placeholder="Tìm theo tên, sdt, ..."
+          onChange={pre => setQuerySearch(pre.target.value)}
         />
       </div>
 
