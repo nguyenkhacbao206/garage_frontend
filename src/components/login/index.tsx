@@ -60,7 +60,7 @@ const Login = () => {
             </Col>
             <Col sm={12}>
               <label className="form-label required" style={{ margin: 5 }}>Mật khẩu</label>
-              <Form.Input name="password" required />
+              <Form.Input name="password" required type="password" />
             </Col>
             <Col sm={12}>
               <Button style={{ width: "100%", marginTop: 25 }} type="gradientPrimary" htmlType="submit">

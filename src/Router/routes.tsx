@@ -7,6 +7,7 @@ import ServiceGarage from "../pages/dich-vu";
 import Customers from "../pages/khach-hang";
 import Technicians from "../pages/ky-thuat-vien";
 import PartCars from "../pages/phu-tung";
+import Settings from "../pages/settings";
 import Payment from "../pages/thanh-toan";
 import Statistical from "../pages/thong-ke";
 import VehicleReception from "../pages/tiep-nhan-xe";
@@ -52,6 +53,10 @@ export const elementRoute = [
       {
         path: "/cars",
         element: <Cars />
+      },
+      {
+        path: "/settings",
+        element: <Settings />
       },
     ]
   },

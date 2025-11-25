@@ -1,3 +1,5 @@
+import { ColorStyle } from "../../../styles/colors";
+
 interface IDetailPart {
   data: any;
 }
@@ -31,18 +33,23 @@ const DetailPart = ({ data }: IDetailPart) => {
         maxWidth: "650px",
       }}
     >
-      <h3 style={{ marginBottom: "20px", color: "#333" }}>
+      <h3 style={{ marginBottom: "0px", color: "#333" }}>
         Thông tin phụ tùng
       </h3>
+
+      <div style={{
+        marginBottom: "20px",
+        marginTop: 6,
+        fontSize: 13,
+        color: ColorStyle.TextTertiary
+      }}>
+        <span style={{}}>Lần cập nhật gần nhất:</span>
+        <span style={{}}>{data?.updatedAt || "-"}</span>
+      </div>
 
       <div style={rowStyle}>
         <span style={labelStyle}>Tên phụ tùng:</span>
         <span style={valueStyle}>{data?.name || "-"}</span>
-      </div>
-
-      <div style={rowStyle}>
-        <span style={labelStyle}>Đơn vị:</span>
-        <span style={valueStyle}>{data?.unit || "-"}</span>
       </div>
 
       <div style={rowStyle}>

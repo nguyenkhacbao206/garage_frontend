@@ -13,6 +13,11 @@ const getSupplier = async () => {
   return res as ApiResponse<MSupplier.IRecord[]>
 }
 
+const getSupplierSearch = async (query: any) => {
+  const res = await axios.get(`${ipSupplier}/search?keyword=${query}`)
+  return res as ApiResponse<MSupplier.IRecord[]>
+}
+
 const getSupplierId = async (id: string) => {
   const res = await axios.get(`${ipSupplier}/${id}`)
   return res as ApiResponse<MSupplier.IRecord>
@@ -38,6 +43,7 @@ export {
   getSupplierId,
   postSupplier,
   putSupplier,
-  deleteSupplier
+  deleteSupplier,
+  getSupplierSearch
 }
 

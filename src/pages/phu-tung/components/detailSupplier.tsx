@@ -1,3 +1,5 @@
+import { ColorStyle } from "../../../styles/colors";
+
 interface IDetailSupplier {
   data: any;
 }
@@ -31,9 +33,18 @@ const DetailSupplier = ({ data }: IDetailSupplier) => {
         maxWidth: "650px",
       }}
     >
-      <h3 style={{ marginBottom: "20px", color: "#333" }}>
+      <h3 style={{ marginBottom: "0", color: "#333" }}>
         Thông tin nhà cung cấp
       </h3>
+      <div style={{
+        marginBottom: "20px",
+        marginTop: 6,
+        fontSize: 13,
+        color: ColorStyle.TextTertiary
+      }}>
+        <span style={{}}>Lần cập nhật gần nhất:</span>
+        <span style={{}}>{data?.updatedAt || "-"}</span>
+      </div>
 
       <div style={rowStyle}>
         <div style={labelStyle}>Mã NCC:</div>
@@ -43,6 +54,11 @@ const DetailSupplier = ({ data }: IDetailSupplier) => {
       <div style={rowStyle}>
         <div style={labelStyle}>Tên nhà cung cấp:</div>
         <div style={valueStyle}>{data?.name || "-"}</div>
+      </div>
+
+      <div style={rowStyle}>
+        <div style={labelStyle}>Ngày tạo:</div>
+        <div style={valueStyle}>{data?.createdAt || "-"}</div>
       </div>
 
       <div style={rowStyle}>
