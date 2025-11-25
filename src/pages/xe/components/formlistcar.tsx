@@ -15,34 +15,56 @@ interface IFormCar {
 }
 
 const FormCar = ({ valueInitial, method, setIsModal, isReload, setIsReload }: IFormCar) => {
-  const onSubmit = async (data: MCar.IResponse) => {
+
+  const onSubmit = async (data: any) => {
+    const customerId = method === "post" ? data.customerId : valueInitial?.customerId;
+    if (!customerId) {
+      notify({
+        title: "Lỗi",
+        type: "error",
+        description: "Vui lòng chọn khách hàng!"
+      });
+      return;
+    }
+    if (!data.plate) {
+        notify({ title: "Lỗi", type: "error", description: "Vui lòng nhập biển số xe!" });
+        return;
+    }
     const payload: MCar.IRequest = {
       plate: data.plate,
       model: data.model || "",
       manufacturer: data.manufacturer || "",
       description: data.description || "",
-      customerId: method === "post" ? data.customerId : valueInitial?.customerId || "",
+      customerId: customerId,
+      active: method === "put" ? valueInitial?.active : false 
     };
 
     let res: any;
 
-    if (method === "post") {
-      res = await postCar(payload as any);
-    } else {
-      if (!valueInitial?.id) return;
-      res = await putCar(valueInitial.id, payload as any);
-    }
+    try {
+      if (method === "post") {
+        res = await postCar(payload);
+      } else {
+        if (!valueInitial?.id) {
+            notify({ title: "Lỗi", type: "error", description: "Không tìm thấy ID xe cần sửa" });
+            return;
+        }
+        res = await putCar(valueInitial.id, payload);
+      }
 
-    if (res?.success) {
-      notify({
-        title: "Thành công",
-        type: "success",
-        description: method === "post" ? "Đã thêm xe thành công" : "Thông tin xe đã được cập nhật",
-      });
-      setIsReload?.(!isReload);
-      setIsModal?.(false);
-    } else {
-      notify({ title: "Lỗi", type: "error", description: res?.message || "Có lỗi xảy ra" });
+      if (res?.success) {
+        notify({
+          title: "Thành công",
+          type: "success",
+          description: method === "post" ? "Đã thêm xe thành công" : "Thông tin xe đã được cập nhật",
+        });
+        setIsReload?.(!isReload);
+        setIsModal?.(false);
+      } else {
+        notify({ title: "Lỗi", type: "error", description: res?.message || "Có lỗi xảy ra từ phía server" });
+      }
+    } catch (error) {
+        notify({ title: "Lỗi hệ thống", type: "error", description: "Không thể kết nối đến server" });
     }
   };
 
@@ -59,7 +81,8 @@ const FormCar = ({ valueInitial, method, setIsModal, isReload, setIsReload }: IF
             {method === "post" ? (
               <CustomerSelect 
                 method={method}
-                name="customerId" />
+                name="customerId" 
+              />
             ) : (
               <Form.Input name="customerCode" disabled />
             )}
@@ -82,13 +105,13 @@ const FormCar = ({ valueInitial, method, setIsModal, isReload, setIsReload }: IF
 
           <Col sm={12}>
             <label className="form-label mb-1">Mô tả</label>
-            <Form.Input name="description" placeholder="Mô tả" />
+            <Form.Input name="description" placeholder="Mô tả (Tình trạng xe, vết xước...)" />
           </Col>
         </Row>
 
         <div style={{ textAlign: "end", margin: "15px 10px" }}>
           <Button htmlType="submit" type="gradientPrimary">
-            {method === "post" ? "Thêm mới" : "Lưu"}
+            {method === "post" ? "Thêm mới" : "Lưu thay đổi"}
           </Button>
         </div>
       </Form>
