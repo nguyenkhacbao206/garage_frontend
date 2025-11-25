@@ -7,5 +7,7 @@ declare module MSupplier {
     email: string,
     phone: string,
     description: string,
+    createdAt: string,
+    updatedAt: string,
   }
 }

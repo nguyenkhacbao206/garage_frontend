@@ -1,38 +1,49 @@
 import { useEffect, useState } from "react"
-import { getServices, delService, searchServices } from "../../services/api/servicesApi"
+import { getServices, delService, searchServices, sortServices } from "../../services/api/servicesApi"
 import TableBase, { Column } from "../../components/BaseTable"
 import Button from "../../components/Button"
 import BaseModal from "../../components/baseModal"
 import FormService from "./components/form"
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch, AiTwotoneCloseCircle } from "react-icons/ai"
+import DetailService from "./components/detailService"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye, AiOutlineSearch, AiTwotoneCloseCircle, AiOutlineSortAscending, AiOutlineSortDescending } from "react-icons/ai"
 import { Input } from "../../components/FormBase"
 import { notify } from "../../components/Notification"
 
 const convertBrokenObjectToArray = (res: any): MService.IRecord[] => {
   if (!res) return []
+  if (Array.isArray(res.data)) return res.data
+  if (res.data && Array.isArray(res.data)) return res.data
   
-  // Nếu res.data tồn tại trả về mảng rỗng
-  if (res.data) return []
+  if (res.data && typeof res.data === 'object') {
+     return Object.values(res.data)
+  }
 
-  // Nếu res là đối tượng { "0": ..., "1": ... }
-  const dataArray = Object.keys(res)
+  if (typeof res === 'object') {
+     const dataArray = Object.keys(res)
     .filter(key => !isNaN(Number(key)))
     .map(key => (res as any)[key]);
-
-  return dataArray
+     return dataArray
+  }
+  return []
 }
 
 const Services = () => {
   const [dataService, setDataService] = useState<MService.IRecord[]>([])
+  
   const [isModal, setIsModal] = useState(false)
-  const [isModalDel, setIsModalDel] = useState(false)
   const [serviceEdit, setServiceEdit] = useState<MService.IRecord>()
   const [method, setMethod] = useState<"post" | "put">("post")
-  const [isReload, setIsReload] = useState(true)
+  
+  const [isModalDel, setIsModalDel] = useState(false)
   const [serviceIdDel, setServiceIdDel] = useState<string>()
+  
+  const [isModalDetail, setIsModalDetail] = useState(false)
+  const [dataDetail, setDataDetail] = useState<MService.IRecord>()
 
+  const [isReload, setIsReload] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
+  const [isDesc, setIsDesc] = useState<boolean>(true)
 
   const Columns: Column<MService.IRecord>[] = [
     { title: "Mã dịch vụ", dataIndex: "serviceCode" },
@@ -40,18 +51,26 @@ const Services = () => {
     { title: "Giá (VNĐ)", dataIndex: "price", render: (value) => <div>{Number(value)?.toLocaleString()}</div> },
     { title: "Mô tả", dataIndex: "description" },
     {
-      title: "Thao tác",
-      render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button type="error" style={{ padding: 0, width: 23, height: 23 }} onClick={() => { setServiceIdDel(record.id); setIsModalDel(true) }}>
-            <AiOutlineDelete />
+      title: <div style={{ textAlign: "center" }}>Thao tác</div>,
+      width: 100,
+      render: (value, record, index) => (
+        <div style={{ textAlign: "center", display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={() => { setDataDetail(record); setIsModalDetail(true) }} type="viewDetail" style={{ padding: 0, width: 23, height: 23 }}>
+            <AiOutlineEye />
           </Button>
-          <Button type="primary" style={{ padding: 0, width: 23, height: 23 }} onClick={() => openModal(record, "put")}>
-            <AiOutlineEdit />
-          </Button>
+
+          <Button onClick={() => { setServiceIdDel(record?.id); setIsModalDel(true) }} type="error" style={{
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "0", height: "23px", width: "23px"
+          }}><AiOutlineDelete /></Button>
+
+          <Button onClick={() => openModal(record, "put")} type="primary" style={{
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "0", height: "23px", width: "23px"
+          }}><AiOutlineEdit /></Button>
         </div>
-      )
-    }
+      ),
+    },
   ]
 
   const openModal = (record?: MService.IRecord, type?: "post" | "put") => {
@@ -65,7 +84,7 @@ const Services = () => {
     
     const res = await delService(id)
     if (res?.success) {
-      notify({ title: "Delete", type: "error", description: "Dịch vụ đã được xóa thành công" })
+      notify({ title: "Delete", type: "success", description: "Dịch vụ đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {
@@ -73,7 +92,6 @@ const Services = () => {
     }
   }
 
-  // Debounce search
   useEffect(() => {
     const timerId = setTimeout(() => setDebouncedSearchQuery(searchQuery), 500)
     return () => clearTimeout(timerId)
@@ -86,7 +104,7 @@ const Services = () => {
         if (debouncedSearchQuery) {
           res = await searchServices(debouncedSearchQuery)
         } else {
-          res = await getServices()
+          res = await sortServices(!isDesc)
         }
 
         const workingArray = convertBrokenObjectToArray(res)
@@ -98,12 +116,17 @@ const Services = () => {
       }
     }
     fetchData()
-  }, [isReload, debouncedSearchQuery])
+  }, [isReload, debouncedSearchQuery, isDesc])
+  
 
   return (
     <>
       <BaseModal isOpen={isModal} closeModal={() => setIsModal(false)}>
         <FormService valueInitial={serviceEdit} method={method} setIsModal={setIsModal} isReload={isReload} setIsReload={setIsReload} />
+      </BaseModal>
+
+      <BaseModal isOpen={isModalDetail} closeModal={() => setIsModalDetail(false)}>
+        <DetailService data={dataDetail} />
       </BaseModal>
 
       <BaseModal isOpen={isModalDel} closeModal={() => setIsModalDel(false)}>
@@ -129,14 +152,21 @@ const Services = () => {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-        <AiOutlineSearch />
-        <Input
-          name="search"
-          style={{ width: 230, margin: "10px 10px", marginRight: 25, borderRadius: 7 }}
-          placeholder="Tìm theo mã, tên, ..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        <Button onClick={() => setIsDesc(!isDesc)} type="dashed" style={{ marginRight: 10, display: 'flex', alignItems: 'center', gap: 5, height: 38 }}>
+            {isDesc ? <AiOutlineSortDescending size={20} /> : <AiOutlineSortAscending size={20} />}
+            {isDesc ? "Mới nhất" : "Cũ nhất"}
+        </Button>
+
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <AiOutlineSearch style={{ position: 'absolute', left: 15, zIndex: 1 }} />
+          <Input
+            name="search"
+            style={{ width: 230, margin: "10px 10px", marginRight: 25, borderRadius: 7 }}
+            placeholder="Tìm theo mã, tên, ..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <TableBase columns={Columns} dataSource={dataService} />

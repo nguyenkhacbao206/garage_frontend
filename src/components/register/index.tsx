@@ -29,7 +29,7 @@ const Register = () => {
       background: ColorStyle.GradientPrimary
     }}>
       <Container style={{
-        maxHeight: "450px",
+        maxHeight: "600px",
         maxWidth: "500px",
         padding: "40px 20px",
         borderRadius: "13px",
@@ -57,7 +57,11 @@ const Register = () => {
             </Col>
             <Col sm={12}>
               <label className="form-label required" style={{ margin: 5 }}>Email</label>
-              <Form.Input name="email" required />
+              <Form.Input name="email" required type="email" />
+            </Col>
+            <Col sm={12}>
+              <label className="form-label required" style={{ margin: 5 }}>Số điện thoại</label>
+              <Form.Input name="phonenumber" required />
             </Col>
             <Col sm={12}>
               <label className="form-label required" style={{ margin: 5 }}>Mật khẩu</label>

@@ -1,14 +1,16 @@
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineSearch } from "react-icons/ai"
+import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye, AiOutlineSearch } from "react-icons/ai"
 import Button from "../../../components/Button"
 import { Input } from "../../../components/FormBase"
 import TableBase, { Column } from "../../../components/BaseTable"
 import { useEffect, useState } from "react"
-import { deleteSupplier, getSupplier } from "../../../services/api/supplierApi"
+import { deleteSupplier, getSupplier, getSupplierSearch } from "../../../services/api/supplierApi"
 import BaseModal from "../../../components/baseModal"
 import { IoIosCloseCircleOutline } from "react-icons/io"
 import { notify } from "../../../components/Notification"
 import { ColorStyle } from "../../../styles/colors"
 import FormSupplier from "./formSupplier"
+import ConfirmDelete from "../../../components/confirmDelete"
+import DetailSupplier from "./detailSupplier"
 
 const Suppliers = () => {
   const [dataSupplier, setDataSupplier] = useState<MSupplier.IRecord[]>([])
@@ -19,7 +21,8 @@ const Suppliers = () => {
   const [idSpdel, setIdSpdel] = useState<string>('')
   const [method, setMethod] = useState<"post" | "put">("post")
   const [dataSupplierId, setDataSupplierId] = useState<MSupplier.IRecord>()
-
+  const [isModalDetail, setIsModalDetail] = useState<boolean>(false)
+  const [querySearch, setQuerySearch] = useState<any>()
 
 
   const columns: Column<MSupplier.IRecord>[] = [
@@ -54,10 +57,13 @@ const Suppliers = () => {
       width: 300
     },
     {
-      title: "Thao tác",
-      width: 80,
+      title: <div style={{ textAlign: "center" }}>Thao tác</div>,
+      width: 100,
       render: (value, record, index) => (
         <div style={{ display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={() => { setDataSupplierId(record); setIsModalDetail(true) }} type="viewDetail" style={{ padding: 0, width: 23, height: 23 }}>
+            <AiOutlineEye />
+          </Button>
           <Button onClick={() => { setIdSpdel(record?.id); setIsModalDel(true) }} type="error" style={{ padding: 0, width: 23, height: 23 }}>
             <AiOutlineDelete />
           </Button>
@@ -70,14 +76,21 @@ const Suppliers = () => {
   ]
 
   useEffect(() => {
-    getSupplier().then(res => setDataSupplier(res?.data as MSupplier.IRecord[]))
-    setLoading(false)
-  }, [isReload])
+    if (querySearch) {
+      getSupplierSearch(querySearch)
+        .then(res => setDataSupplier(res?.data ? res.data : []))
+        .finally(() => setLoading(false))
+    } else {
+      getSupplier()
+        .then(res => setDataSupplier(res?.data ? res.data : []))
+        .finally(() => setLoading(false))
+    }
+  }, [isReload, querySearch])
 
   const delModal = async (id: string) => {
     const res = await deleteSupplier(id)
     if (!res.status) {
-      notify({ title: "Delete", type: "error", description: "Thông tin nhà cung cấp đã được xóa thành công" })
+      notify({ title: "Delete", type: "success", description: "Thông tin nhà cung cấp đã được xóa thành công" })
       setIsModalDel(false)
       setIsReload(!isReload)
     } else {
@@ -95,6 +108,13 @@ const Suppliers = () => {
   return (
     <>
       <BaseModal
+        isOpen={isModalDetail}
+        closeModal={() => setIsModalDetail(false)}
+      >
+        <DetailSupplier data={dataSupplierId} />
+      </BaseModal>
+
+      <BaseModal
         isOpen={isModal}
         closeModal={() => setIsModal(false)}
       >
@@ -105,21 +125,10 @@ const Suppliers = () => {
         isOpen={isModalDel}
         closeModal={() => setIsModalDel(false)}
       >
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: 'column'
-        }}>
-          <IoIosCloseCircleOutline style={{ fontSize: 70, color: ColorStyle.Error }} />
-          <h5>Are you sure ?</h5>
-          <p>are you sure you would like to do this</p>
-          <div>
-            <Button style={{ marginRight: 10 }} onClick={() => setIsModalDel(false)}>Cancel</Button>
-            <Button onClick={() => delModal(idSpdel)} type="error">Confirm</Button>
-          </div>
-        </div>
-
+        <ConfirmDelete
+          onCancel={() => setIsModalDel(false)}
+          onConfirm={() => delModal(idSpdel)}
+        />
       </BaseModal>
       <div style={{ margin: "50px 0" }}>
         <div style={{
@@ -146,9 +155,10 @@ const Suppliers = () => {
                   width: 230,
                   margin: "10px 10px",
                   marginRight: "25px ",
-                  borderRadius: 7
+                  borderRadius: 7,
                 }}
                 placeholder="Tìm theo mã, tên sản phẩm ..."
+                onChange={e => setQuerySearch(e.target.value)}
               />
             </div>
             <TableBase

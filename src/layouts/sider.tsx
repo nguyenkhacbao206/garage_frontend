@@ -12,6 +12,7 @@ import {
   AiOutlineCodeSandbox,
   AiOutlineBranches,
   AiOutlineCar,
+  AiOutlineSetting,
 } from "react-icons/ai";
 import { useState } from "react";
 import { useBreakpoint } from "../hooks/useBreakpoint";
@@ -27,7 +28,7 @@ const SiderManage = ({ isSider, setIsSider }: { isSider: boolean, setIsSider?: (
     color: ColorStyle.SidebarForeground,
     textDecoration: "none",
     fontWeight: 500,
-    fontSize: "15px",
+    fontSize: "14px",
     transition: ColorStyle.TransitionSmooth,
   };
 
@@ -124,6 +125,7 @@ const SiderManage = ({ isSider, setIsSider }: { isSider: boolean, setIsSider?: (
               { to: "/services", icon: <AiOutlineTool size={18} />, label: "Dịch vụ" },
               { to: "/parts", icon: <AiOutlineCodeSandbox size={18} />, label: "Phụ tùng" },
               { to: "/technicians", icon: <AiOutlineBranches size={18} />, label: "Kỹ thuật viên" },
+              { to: "/settings", icon: <AiOutlineSetting size={18} />, label: "Thông tin cá nhân" },
             ].map((item) => (
               <Link
                 key={item.to}

@@ -6,7 +6,7 @@ import Button from "../Button"
 import { FourSquare } from "react-loading-indicators"
 
 export type Column<T = any> = {
-  title: string,
+  title: React.ReactNode,
   dataIndex?: keyof T,
   width?: number,
   render?: (value: any, record: T, index: number) => React.ReactNode
@@ -19,6 +19,7 @@ export interface ITableBase<T = any> {
   pageSize?: number,
   loading?: boolean,
   width?: number
+  emptyText?: string
 }
 
 
@@ -26,8 +27,9 @@ const TableBase = <T,>({
   columns,
   dataSource,
   rowkey = "id",
-  pageSize = 10,
+  pageSize = 7,
   loading = false,
+  emptyText = "Không có dữ liệu",
 }: ITableBase<T>) => {
   const [pageNumber, setPagenumber] = useState<number>(1)
   const totalPage = Math.ceil(dataSource?.length / pageSize);
@@ -73,7 +75,13 @@ const TableBase = <T,>({
             </tr>
           </thead>
           <tbody>
-            {loading ? <tr><td colSpan={columns?.length} style={{ textAlign: "center", paddingTop: "30px" }}><FourSquare color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} size="small" /><p>Đang tải dữ liệu ...</p></td></tr>
+            {loading ? <tr><td colSpan={columns?.length} style={{ paddingTop: "30px" }}>
+              {/* <FourSquare color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} size="small" /> */}
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <div className="loader"></div>
+                <p style={{ fontSize: 16, fontWeight: 500 }}>Đang tải dữ liệu ...</p>
+              </div>
+            </td></tr>
               : (dataSource && dataSource.length !== 0) ? dataTable?.map((record, index) => {
                 const key = getRowKey(record, index);
                 return (

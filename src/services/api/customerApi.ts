@@ -6,6 +6,11 @@ const getCustomers = async () => {
   return res
 }
 
+const getCustomerSearch = async (query: any) => {
+  const res = await axios.get(ipCustomer + `/search?keyword=${query}`)
+  return res
+}
+
 const getCustomerId = async (id: string) => {
   const res = await axios.get(ipCustomer + `/${id}`)
   return res
@@ -31,6 +36,7 @@ export {
   getCustomers,
   postCustomer,
   putCustomer,
-  delCustomer
+  delCustomer,
+  getCustomerSearch
 }
 
